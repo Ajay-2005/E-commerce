@@ -1,0 +1,33 @@
+<section>
+    <div class="container-fluid">
+        <div class="text-end mt-4">
+            <a href="admin/add-product"><button class="btn btn-danger ">Add a Product</button></a>
+        </div>
+
+        <table class="table mt-4">
+            <thead>
+                <tr>
+
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each product}}
+                <tr>
+
+                    <td>{{this.name}}</td>
+                    <td>{{this.category}}</td>
+                    <td>{{this.Price}}</td>
+                    <td><img src="/product-images/{{this._id}}.jpeg"></td>
+                    <td>{{this.description}}</td>
+                </tr>
+                {{/each}}
+
+            </tbody>
+        </table>
+    </div>
+</section>
