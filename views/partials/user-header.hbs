@@ -14,7 +14,7 @@
                     <li class="nav-item">
                         <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
                     </li>
-                      <li class="nav-item">
+                    <li class="nav-item">
                         <a class="nav-link text-white" href="#">Product </a>
                     </li>
                     <li class="nav-item">
@@ -24,14 +24,31 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#" tabindex="-1" aria-disabled="true">Orders</a>
                     </li>
-                      <li class="nav-item">
-                        <a class="nav-link text-white" href="/login" tabindex="-1" aria-disabled="true">login</a>
-                    </li>
-                </ul>
-          
-    </div>
 
+                </ul>
+
+
+                <div class="dropdown mr-1">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{#if user}}
+                        {{user.Name}}
+                        {{else}}
+                        Account
+                        {{/if}}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        {{#if user}}
+                         <a class="dropdown-item" href="/logout">logout</a>
+                         {{else}}
+                        <a class="dropdown-item" href="/login">login</a>
+                        <a class="dropdown-item" href="#">signup</a>
+                        {{/if}}
+                    </div>
+                </div>
             </div>
-        
+
+        </div>
+
     </nav>
 </header>
