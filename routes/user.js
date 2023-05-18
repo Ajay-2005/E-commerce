@@ -16,7 +16,11 @@ router.get('/', function (req, res, next) {
 });
 })
 router.get('/login',(req,res)=>{
-  res.render('user/login')
+  if(req.session.loggedIn){
+    res.redirect("/")
+  }
+  res.render('user/login',{"loginErr":req.session.loginErr})
+  req.session.loginErr=false
 })
 router.get('/signup',(req,res)=>{
   res.render('user/signup')
@@ -40,6 +44,7 @@ router.post('/login',(req,res)=>{
 
     }
     else{
+      req.session.loginErr="invalid Email or Password"
       res.redirect("/login")
       console.log(response)
     }
@@ -49,5 +54,10 @@ router.get("/logout",(req,res)=>{
   req.session.destroy()
   res.redirect("/login")
 })
-
+router.get("/product-details",(req,res)=>{
+  productHelper.getAllProduct().then((product)=>{
+    
+    res.render('user/product-details', { product});
+})
+})
 module.exports = router;

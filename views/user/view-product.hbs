@@ -4,12 +4,13 @@
       {{#each product}}
       <div class="col-md-3 col-sm-6">
         <div class="card mb-4">
-          <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="...">
+     <a href="/product-details"><img width="250px" height="250px"src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="..."></a>
           <div class="card-body">
             <h5 class="card-title">{{this.name}}</h5>
-            <p class="card-text">{{this.description}}</p>
+           
             <p class="card-text">{{this.Price}}</p>
-            <a href="#" class="btn btn-primary btn-sum">Add to Cart</a>
+            <a href="#" class="btn btn-warning shadow-0"> Buy now </a>
+            <a href="#" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart</a>
           </div>
         </div>
       </div>
