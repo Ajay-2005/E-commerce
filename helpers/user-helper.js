@@ -1,6 +1,10 @@
 const db = require("../config/mongo connection")
 const collection = require("../config/collection")
 const bcrypt = require("bcrypt")
+const mailer=require('nodemailer')
+require("dotenv").config()
+const crypto=require("crypto")
+const { token } = require("morgan")
 module.exports = {
     doSignup: (userData) => {
         return new Promise(async (resolve, reject) => {
@@ -52,5 +56,58 @@ module.exports = {
                 resolve({status:false})
             } 
 })
-    }
+    },
+    generateToken:()=>{
+        return crypto.randomBytes(20).toString('hex');
+    },
+    updateUserResetToken: async (email, token) => {
+        try {
+          const userCollection = db.get().collection(collection.USER_COLLECTION);
+          const result = await userCollection.findOneAndUpdate(
+            { Email: email },
+            { $set: { resetToken: token } },
+            { returnOriginal: false }
+          );
+        console.log(result)
+          if (result !== null && result.value) {
+            return result.value;
+          } else {
+            throw new Error('User not found');
+          }
+        } catch (error) {
+          if (error.message === 'User not found') {
+            return null; // or return an empty object: {}
+          } else {
+            console.error(error);
+            throw error;
+          }
+        }
+      },
+      
+      
+      
+      sendPasswordResetEmail:async (email,resetLink)=>{
+        try{
+            const transporter=mailer.createTransport({
+                service:'Gmail',
+                auth:{
+                    user:process.env.Email,
+                    pass:process.env.My-Password
+                }
+            })
+            const mailOption={
+                from:process.env.Email,
+                to:email,
+                subject:"Password Reset",
+                text:"please click the following link to reset your Password:$(resetLink)",
+            }
+            await transporter.sendMail(mailOption)
+            
+        }
+        catch(err){
+            throw err
+        }
+        
+      }
+
 }
