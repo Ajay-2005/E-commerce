@@ -68,11 +68,7 @@ try{
   const token=userHelper.generateToken();
   
   const result = await userHelper.updateUserResetToken(email,token);
-  console.log(result)
- 
-  if (!result.value){
-    return res.status(404).json({message:'user not found'})
-  }
+
   const resetlink='http://localhost:3000/forgot-password?token=$(token)'
   await userHelper.sendPasswordResetEmail(email,resetlink);
   return res.status(200).json({message:'password reset email sent'})
