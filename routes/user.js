@@ -53,11 +53,21 @@ router.get("/logout", (req, res) => {
   req.session.destroy()
   res.redirect("/login")
 })
-router.get("/product-details", (req, res) => {
-  productHelper.getAllProduct().then((product) => {
-    res.render('user/product-details', { product });
+router.get("/product",(req,res)=>{
+  productHelper.getAllProduct().then((product)=>{
+    res.render("user/product",{product})
   })
 })
+router.get("/product-details/:name", async (req, res) => {
+ 
+  let productName = req.params.name;
+  console.log(productName)
+  const product = await productHelper.getProductByName(productName);
+  const similarProducts = await productHelper.getSimilarProducts(productName);
+
+  res.render("user/product-details", { product, similarProducts });
+});
+
 router.get("/forgot-password",(req,res)=>{
   res.render("user/forgot-password")
 })

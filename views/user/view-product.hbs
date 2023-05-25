@@ -12,10 +12,11 @@
               <p class="text-white mb-0 small">x4</p>
             </div>
           </div>
-          <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="Laptop" width="250px" height="250px" />
+          <a href="/product-details/{{this.name}}"> <img src="/product-images/{{this._id}}.jpeg"
+              class="card-img-top" alt="Laptop" width="250px" height="250px" /></a>
           <div class="card-body">
             <div class="d-flex justify-content-between">
-              <p class="small"><a href="/product-details" class="text-muted">{{this.category}}</a></p>
+              <p class="small">{{this.category}}</p>
 
             </div>
 
@@ -33,13 +34,15 @@
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
               </div>
-              
+
             </div>
             <a href="#" class="btn btn-warning shadow-0 mx-3 my-3"> Buy now </a>
-            <a href="#" class="btn btn-primary shadow-0 mx-3 my-3"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+            <a href="#" class="btn btn-primary shadow-0 mx-3 my-3"> <i class="me-1 fa fa-shopping-basket"></i> Add to
+              cart </a>
           </div>
         </div>
       </div>
+
       {{/each}}
     </div>
 

@@ -85,28 +85,34 @@ module.exports = {
   },
 
 
-  // Function to send password reset email
-   sendPasswordResetEmail :async (email, resetLink) => {
+  
+
+  sendPasswordResetEmail :async (email, resetLink) => {
     try {
       const transporter = mailer.createTransport({
-        // Configure your email transport here (e.g., SMTP or ethereal)
-        service: 'Gmail',
+        host: 'smtp.ethereal.email',
+        port: 587,
+        secure: false,
         auth: {
-          user: 'your-email@example.com',
-          pass: 'your-password',
-        },
+          user: process.env.Email,
+          pass: process.env.Password
+        }
       });
-
+  
       const mailOptions = {
-        from: 'your-email@example.com',
+        from: process.env.Email,
         to: email,
         subject: 'Password Reset',
-        text: `Please click the following link to reset your password: ${resetLink}`,
+        text: `Please click the following link to reset your password: ${resetLink}`
       };
-
-      await transporter.sendMail(mailOptions);
+  
+      const info = await transporter.sendMail(mailOptions);
+      console.log('Email sent:', info.response);
+  
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
 }
+    
