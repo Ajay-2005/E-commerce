@@ -1,0 +1,21 @@
+<section>
+    <div class="container-fluid mt-4">
+        <div class="col-md-6">
+            <h2 class="text-center">Edit a product</h2>
+            <form action="/admin/edit-product/{{product.name}}" method="POST" enctype="multipart/form-data">
+                <label>name</label>
+                <input type="text" name="name" value="{{product.name}}"class="form-control">
+                <label>category</label>
+                <input type="text" name="category" value="{{product.category}}" class="form-control">
+                <label>price</label>
+                <input type="text" name="Price" value="{{product.Price}}"class="form-control">
+                <label>image</label>
+                <input type="file" name="image" class="form-control">
+                <label>description</label>
+                <textarea col="15" row="5"name="description" class="form-control" value="{{product.description}}">
+                    </textarea>
+                <input type="submit" class="btn btn-success mt-5"></input>
+            </form>
+        </div>
+    </div>
+</section>

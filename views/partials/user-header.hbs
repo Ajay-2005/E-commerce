@@ -1,10 +1,10 @@
 <header>
 
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand text-white mx-5" href="#">TrendLynx</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -17,23 +17,24 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/product">Product </a>
                     </li>
+                    {{#if user}}
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="#"> My cart</a>
+                        <a class="nav-link text-white" href="/cart"> My cart</a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link text-white" href="#" tabindex="-1" aria-disabled="true">Orders</a>
                     </li>
-
+                    {{/if}}
                 </ul>
 
 
                 <div class="dropdown mr-1">
 
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    <button class="btn btn-dark btn-mx-2 my-2 ml-auto dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-person-circle" viewBox="0 0 16 16">
+                            class="bi bi-person-circle mx-2" viewBox="0 0 16 16">
                             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
                             <path fill-rule="evenodd"
                                 d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
@@ -45,12 +46,12 @@
                         {{/if}}
                     </button>
 
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
                         {{#if user}}
-                        <a class="dropdown-item" href="/logout">logout</a>
+                        <a class="dropdown-item text-white" href="/logout">Logout</a>
                         {{else}}
-                        <a class="dropdown-item" href="/login">login</a>
-                        <a class="dropdown-item" href="/signup">signup</a>
+                        <a class="dropdown-item text-white" href="/login">Login</a>
+                        <a class="dropdown-item text-white" href="/signup">Signup</a>
                         {{/if}}
                     </div>
                 </div>

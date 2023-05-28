@@ -5,6 +5,9 @@ const mailer = require('nodemailer')
 require("dotenv").config()
 const crypto = require("crypto")
 const { token } = require("morgan")
+const { ObjectId } = require("mongodb");
+const { response } = require("express")
+const { promises } = require("dns")
 module.exports = {
   doSignup: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -85,9 +88,9 @@ module.exports = {
   },
 
 
-  
 
-  sendPasswordResetEmail :async (email, resetLink) => {
+
+  sendPasswordResetEmail: async (email, resetLink) => {
     try {
       const transporter = mailer.createTransport({
         host: 'smtp.ethereal.email',
@@ -98,21 +101,77 @@ module.exports = {
           pass: process.env.Password
         }
       });
-  
+
       const mailOptions = {
         from: process.env.Email,
         to: email,
         subject: 'Password Reset',
         text: `Please click the following link to reset your password: ${resetLink}`
       };
-  
+
       const info = await transporter.sendMail(mailOptions);
       console.log('Email sent:', info.response);
-  
+
     } catch (error) {
       console.log(error);
       throw error;
     }
+  },
+  addToCart: (proId, userId) => {
+    return new Promise(async (resolve, reject) => {
+      let userCart = await db.get().collection(collection.Cart_Collection).findOne({ user: new ObjectId(userId) })
+      if (userCart) {
+        db.get().collection(collection.Cart_Collection).updateOne({ user: new ObjectId(userId) }, {
+          $push: { products: new ObjectId(proId) }
+        }).then((response) => {
+          resolve(response)
+        })
+      } else {
+        let CartObj = {
+          user: new ObjectId(userId),
+          products: [new ObjectId(proId)]
+        }
+        db.get().collection(collection.Cart_Collection).insertOne(CartObj).then((response) => {
+          resolve(response)
+        })
+      }
+    })
+  },
+  getCartProducts: (userID) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let cartItems = await db.get().collection(collection.Cart_Collection).aggregate([
+          {
+            $match: {
+              user: new ObjectId(userID)
+            }
+          },
+          {
+            $lookup: {
+              from: collection.PRODUCT,
+              let: { proList: "$products" },
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $in: ["$_id", "$$proList"]
+                    }
+                  }
+                }
+              ],
+              as: "cartItems"
+            }
+          }
+        ]).toArray();
+        if (cartItems.length > 0) {
+          resolve(cartItems[0].cartItems);
+        } else {
+          resolve([]); // Return an empty array if no cart items found
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
   }
+  
 }
-    

@@ -4,6 +4,7 @@ var collection = require('../config/collection');
 const { ObjectId } = require("mongodb");
 
 
+
 module.exports = {
   addProduct: (product, callback) => {
     console.log(product)
@@ -70,8 +71,23 @@ getProductByName: (productName) => {
       }
     });
   },
-};
+  UpdateProduct:(proName,Productdetails)=>{
+    return new Promise ((resolve,reject)=>{
+      db.get().collection(collection.PRODUCT).updateOne({name:proName},{
+        $set:{
+          name:Productdetails.name,
+          category:Productdetails.category,
+          Price:Productdetails.Price,
+          description:Productdetails.description
+          
+        }
+      }).then((response)=>{
+        resolve()
+      })
+    })
+  }
 
+}
     
 
 

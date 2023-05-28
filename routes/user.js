@@ -23,11 +23,17 @@ router.get('/login', (req, res) => {
 })
 router.get('/signup', (req, res) => {
   res.render('user/signup')
+
 })
 router.post('/signup', async (req, res) => {
   try {
-    const data = await userHelper.doSignup(req.body)
-    console.log(data)
+    await userHelper.doSignup(req.body).then((response) => {
+      console.log(response)
+      req.session.loggedIn = true
+      req.session.user = response
+      res.redirect('/')
+    })
+
   }
   catch (err) {
     console.log(err)
@@ -53,13 +59,13 @@ router.get("/logout", (req, res) => {
   req.session.destroy()
   res.redirect("/login")
 })
-router.get("/product",(req,res)=>{
-  productHelper.getAllProduct().then((product)=>{
-    res.render("user/product",{product})
+router.get("/product", (req, res) => {
+  productHelper.getAllProduct().then((product) => {
+    res.render("user/product", { product })
   })
 })
 router.get("/product-details/:name", async (req, res) => {
- 
+
   let productName = req.params.name;
   console.log(productName)
   const product = await productHelper.getProductByName(productName);
@@ -67,26 +73,42 @@ router.get("/product-details/:name", async (req, res) => {
 
   res.render("user/product-details", { product, similarProducts });
 });
+const verifyLogin = (req, res, next) => {
+  if (req.session.loggedIn) {
+    next()
+  } else {
+    res.redirect("/login")
+  }
+}
+router.get("/cart", verifyLogin, async (req, res) => {
+  let product =await userHelper.getCartProducts(req.session.user._id)
+  console.log(product)
+  res.render("user/cart",{product,user:req.session.user})
+})
+router.get("/add-to-cart/:id", verifyLogin, async (req, res) => {
+  userHelper.addToCart(req.params.id, req.session.user._id).then(() =>
+    res.redirect("/"))
+})
 
-router.get("/forgot-password",(req,res)=>{
+router.get("/forgot-password", (req, res) => {
   res.render("user/forgot-password")
 })
-router.post("/forgot-Password",async (req,res)=>{
-const email=req.body.email
-console.log(email)
-try{
-  const token=userHelper.generateToken();
-  
-  const result = await userHelper.updateUserResetToken(email,token);
+router.post("/forgot-Password", async (req, res) => {
+  const email = req.body.email
+  console.log(email)
+  try {
+    const token = userHelper.generateToken();
 
-  const resetlink='http://localhost:3000/forgot-password?token=$(token)'
-  await userHelper.sendPasswordResetEmail(email,resetlink);
-  return res.status(200).json({message:'password reset email sent'})
- 
-}
-catch(err){
-  console.log(err);
-  return res.status(404).json({message:"internal server Error"})
-}
+    const result = await userHelper.updateUserResetToken(email, token);
+
+    const resetlink = 'http://localhost:3000/forgot-password?token=$(token)'
+    await userHelper.sendPasswordResetEmail(email, resetlink);
+    return res.status(200).json({ message: 'password reset email sent' })
+
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(404).json({ message: "internal server Error" })
+  }
 })
 module.exports = router;

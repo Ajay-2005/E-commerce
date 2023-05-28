@@ -24,7 +24,7 @@
                     <td>{{this.Price}}</td>
                     <td><img src="/product-images/{{this._id}}.jpeg"></td>
                     <td>{{this.description}}</td>
-                    <td><a href="/admin/edit-product" class="btn btn-danger">Edit</a></td>
+                    <td><a href="/admin/edit-product/{{this.name}}" class="btn btn-danger">Edit</a></td>
                     <td><a href="/admin/delete-product/{{this._id}}" class="btn btn-danger">Delete</a></td>
                 </tr>
                 {{/each}}
