@@ -8,6 +8,7 @@ const { token } = require("morgan")
 const { ObjectId } = require("mongodb");
 const { response } = require("express")
 const { promises } = require("dns")
+const { rejects } = require("assert")
 module.exports = {
   doSignup: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -71,7 +72,7 @@ module.exports = {
         { $set: { resetToken: token } },
         { returnOriginal: false }
       );
-      console.log(result)
+      console.log(result);
       if (result !== null && result.value) {
         return result.value;
       } else {
@@ -79,34 +80,38 @@ module.exports = {
       }
     } catch (error) {
       if (error.message === 'User not found') {
-        return null; // or return an empty object: {}
+        return null;
       } else {
         console.error(error);
         throw error;
       }
     }
   },
+  
 
 
 
 
   sendPasswordResetEmail: async (email, resetLink) => {
     try {
+
       const transporter = mailer.createTransport({
-        host: 'smtp.ethereal.email',
-        port: 587,
-        secure: false,
+        service: process.env.EMAIL_SERVICE,
         auth: {
-          user: process.env.Email,
-          pass: process.env.Password
-        }
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
       });
+
+
+
 
       const mailOptions = {
         from: process.env.Email,
         to: email,
         subject: 'Password Reset',
-        text: `Please click the following link to reset your password: ${resetLink}`
+        html: `<p>You have requested a password reset. Click the following link to reset your password:</p>
+        <a href="${resetLink}">${resetLink}</a>`,
       };
 
       const info = await transporter.sendMail(mailOptions);
@@ -116,6 +121,35 @@ module.exports = {
       console.log(error);
       throw error;
     }
+  },
+  getUserByResetToken: (token) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const userCollection = db.get().collection(collection.USER_COLLECTION);
+        const user = await userCollection.findOne({ resetToken: token });
+        resolve(user);
+      } catch (error) {
+        reject(error);
+      }
+    })
+  },
+  updatePassword: (userId, password) => {
+    return new Promise(async (resolve, reject) => {
+      try{
+      
+      const hashedPassword = await bcrypt.hash(password, 10);
+      let userCollection = db.get().collection(collection.USER_COLLECTION)
+      await userCollection.updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { Password:hashedPassword}, $unset: { resetToken: "" } }
+      )
+      resolve()
+      }
+      catch(err){
+        reject(err)
+      }
+    })
+
   },
   addToCart: (proId, userId) => {
     return new Promise(async (resolve, reject) => {
@@ -173,5 +207,5 @@ module.exports = {
       }
     });
   }
-  
+
 }

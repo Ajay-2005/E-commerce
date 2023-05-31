@@ -81,9 +81,9 @@ const verifyLogin = (req, res, next) => {
   }
 }
 router.get("/cart", verifyLogin, async (req, res) => {
-  let product =await userHelper.getCartProducts(req.session.user._id)
+  let product = await userHelper.getCartProducts(req.session.user._id)
   console.log(product)
-  res.render("user/cart",{product,user:req.session.user})
+  res.render("user/cart", { product, user: req.session.user })
 })
 router.get("/add-to-cart/:id", verifyLogin, async (req, res) => {
   userHelper.addToCart(req.params.id, req.session.user._id).then(() =>
@@ -93,22 +93,44 @@ router.get("/add-to-cart/:id", verifyLogin, async (req, res) => {
 router.get("/forgot-password", (req, res) => {
   res.render("user/forgot-password")
 })
-router.post("/forgot-Password", async (req, res) => {
-  const email = req.body.email
+router.post("/forgot-password", async (req, res) => {
+  const email = req.body.email;
   console.log(email)
   try {
-    const token = userHelper.generateToken();
+    const token=await userHelper.generateToken()
+    await userHelper.updateUserResetToken(email, token);
+    console.log(token)
+    const resetLink = `http://localhost:3000/reset-password?token=${token}`;
+    await userHelper.sendPasswordResetEmail(email, resetLink);
 
-    const result = await userHelper.updateUserResetToken(email, token);
-
-    const resetlink = 'http://localhost:3000/forgot-password?token=$(token)'
-    await userHelper.sendPasswordResetEmail(email, resetlink);
-    return res.status(200).json({ message: 'password reset email sent' })
-
-  }
-  catch (err) {
+    res.redirect("/login");
+  } catch (err) {
     console.log(err);
-    return res.status(404).json({ message: "internal server Error" })
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+router.get("/reset-password", (req, res) => {
+  const token = req.query.token
+  res.render("user/reset-password", { token })
+})
+router.post("/reset-password", async (req, res) => {
+  const token = req.body.token
+  const password = req.body.password
+  console.log(password)
+  try {
+    const user = await userHelper.getUserByResetToken(token)
+    console.log(user)
+    if (user) {
+      await userHelper.updatePassword(user._id, password)
+      res.redirect("/login")
+    }
+    else {
+      res.status(404).json({ message: "reset token expired" })
+    }
+  } catch (error) {
+    console.log(err)
   }
 })
+
 module.exports = router;
