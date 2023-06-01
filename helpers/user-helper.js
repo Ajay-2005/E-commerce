@@ -134,9 +134,11 @@ module.exports = {
     })
   },
   updatePassword: (userId, password) => {
+
     return new Promise(async (resolve, reject) => {
       try{
-      
+      console.log(password)
+      console.log(userId)
       const hashedPassword = await bcrypt.hash(password, 10);
       let userCollection = db.get().collection(collection.USER_COLLECTION)
       await userCollection.updateOne(

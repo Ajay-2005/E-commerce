@@ -1,63 +1,53 @@
+<!-- Jumbotron -->
 <header>
+    <div class="p-3 text-center bg-white border-bottom">
+        <div class="container">
+            <div class="row gy-3">
+                <!-- Left elements -->
+                <div class="col-lg-2 col-sm-4 col-4">
+                    <a href="/" target="_blank" class="float-start">
+                        <img src="/images/tlx-logo.png" height="100" />
+                    </a>
+                </div>
+                <!-- Left elements -->
 
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand text-white mx-5" href="#">TrendLynx</a>
-            <button class="navbar-toggler ml-auto" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active text-white" aria-current="page" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/product">Product </a>
-                    </li>
-                    {{#if user}}
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/cart"> My cart</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="#" tabindex="-1" aria-disabled="true">Orders</a>
-                    </li>
-                    {{/if}}
-                </ul>
-
-
-                <div class="dropdown mr-1">
-
-                    <button class="btn btn-dark btn-mx-2 my-2 ml-auto dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                            class="bi bi-person-circle mx-2" viewBox="0 0 16 16">
-                            <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-                            <path fill-rule="evenodd"
-                                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
-                        </svg>
-                        {{#if user}}
-                        {{user.Name}}
-                        {{else}}
-                        Account
-                        {{/if}}
-                    </button>
-
-                    <div class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton">
-                        {{#if user}}
-                        <a class="dropdown-item text-white" href="/logout">Logout</a>
-                        {{else}}
-                        <a class="dropdown-item text-white" href="/login">Login</a>
-                        <a class="dropdown-item text-white" href="/signup">Signup</a>
-                        {{/if}}
+                <!-- Center elements -->
+                <div class="order-lg-last col-lg-5 col-sm-8 col-8">
+                    <div class="d-flex float-end mt-4">
+                        <a href="/signup"
+                            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
+                                class="fas fa-user-alt m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">Sign in</p>
+                        </a>
+                        <a href="/login"
+                            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
+                                class="fas fa-user m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">Login</p>
+                        </a>
+                        <a href="/cart"
+                            class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
+                                class="fas fa-shopping-cart m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">My cart</p>
+                        </a>
                     </div>
                 </div>
+                <!-- Center elements -->
+
+                <!-- Right elements -->
+                <div class="col-lg-5 col-md-12 col-12 ">
+
+                    <div class="input-group mt-4">
+                        <input class="form-control py-2  mr-1 pr-5" type="search" placeholder="search for products,brands and more"
+                            id="example-search-input">
+                        <span class="input-group-prepend">
+                            <button class="btn border-0 ml-n5" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <!-- Right elements -->
             </div>
-
         </div>
-
-    </nav>
+    </div>
 </header>

@@ -97,40 +97,41 @@ router.post("/forgot-password", async (req, res) => {
   const email = req.body.email;
   console.log(email)
   try {
-    const token=await userHelper.generateToken()
+    const token= userHelper.generateToken()
     await userHelper.updateUserResetToken(email, token);
     console.log(token)
     const resetLink = `http://localhost:3000/reset-password?token=${token}`;
     await userHelper.sendPasswordResetEmail(email, resetLink);
 
-    res.redirect("/login");
+ 
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.get("/reset-password", (req, res) => {
+router.get("/reset-password", async (req, res) => {
   const token = req.query.token
+  console.log(token)
   res.render("user/reset-password", { token })
 })
-router.post("/reset-password", async (req, res) => {
-  const token = req.body.token
-  const password = req.body.password
-  console.log(password)
+router.post("/reset-password/:token", async (req, res) => {
+  const token = req.params.token;  // Access the token from the URL params using req.params
+  const password = req.body.password;
+  
   try {
-    const user = await userHelper.getUserByResetToken(token)
-    console.log(user)
+    const user = await userHelper.getUserByResetToken(token);
+    console.log(user);
     if (user) {
-      await userHelper.updatePassword(user._id, password)
-      res.redirect("/login")
-    }
-    else {
-      res.status(404).json({ message: "reset token expired" })
+      await userHelper.updatePassword(user._id, password);
+      res.redirect("/login");
+    } else {
+      res.status(404).json({ message: "reset token expired" });
     }
   } catch (error) {
-    console.log(err)
+    console.log(error);
   }
-})
+});
+
 
 module.exports = router;
