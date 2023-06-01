@@ -14,38 +14,56 @@
                 <!-- Center elements -->
                 <div class="order-lg-last col-lg-5 col-sm-8 col-8">
                     <div class="d-flex float-end mt-4">
-                        <a href="/signup"
-                            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
-                                class="fas fa-user-alt m-1 me-md-2"></i>
-                            <p class="d-none d-md-block mb-0">Sign in</p>
+                        {{#if user}}
+                        <a href="/" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            target="_blank">
+                            <i class="fas fa-user-alt m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">{{user.Name}}</p>
                         </a>
-                        <a href="/login"
-                            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
-                                class="fas fa-user m-1 me-md-2"></i>
+                        <a href="/logout" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            target="_blank">
+                            <i class="fas fa-user-alt m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">Logout</p>
+                        </a>
+                        <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            target="_blank">
+                            <i class="fas fa-shopping-cart m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">My Cart</p>
+                        </a>
+                        {{else}}
+                        <a href="/signup" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            target="_blank">
+                            <i class="fas fa-user-alt m-1 me-md-2"></i>
+                            <p class="d-none d-md-block mb-0">Sign Up</p>
+                        </a>
+                        <a href="/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
+                            target="_blank">
+                            <i class="fas fa-user m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">Login</p>
                         </a>
-                        <a href="/cart"
-                            class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
-                                class="fas fa-shopping-cart m-1 me-md-2"></i>
-                            <p class="d-none d-md-block mb-0">My cart</p>
-                        </a>
+                        {{/if}}
                     </div>
                 </div>
+
+
                 <!-- Center elements -->
 
                 <!-- Right elements -->
-                <div class="col-lg-5 col-md-12 col-12 ">
-
-                    <div class="input-group mt-4">
-                        <input class="form-control py-2  mr-1 pr-5" type="search" placeholder="search for products,brands and more"
-                            id="example-search-input">
-                        <span class="input-group-prepend">
-                            <button class="btn border-0 ml-n5" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
-                    </div>
+                <div class="col-lg-5 col-md-12 col-12">
+                    <form action="/" method="GET">
+                        <div class="input-group mt-4">
+                            <input class="form-control py-2 mr-1 pr-5" type="search"
+                                placeholder="Search for products, brands and more" name="keyword"
+                                id="example-search-input">
+                            <span class="input-group-prepend">
+                                <button class="btn border-0 ml-n5" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </form>
                 </div>
+
                 <!-- Right elements -->
             </div>
         </div>

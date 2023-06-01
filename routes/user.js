@@ -3,17 +3,26 @@ var router = express.Router();
 var productHelper = require('../helpers/product-helper')
 var userHelper = require('../helpers/user-helper')
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  let user = req.session.user
-  console.log(user)
-  productHelper.getAllProduct().then((product) => {
-
+router.get('/', async (req, res, next) => {
+  try {
+    let user = req.session.user;
+    
+    let product = await productHelper.getAllProduct();
+    let keyword = req.query.keyword;
+  
+    if (keyword) {
+      product = product.filter((product) => {
+        return product.name.toLowerCase().includes(keyword.toLowerCase());
+      });
+    }
+  
+    console.log(product);
     res.render('user/view-product', { product, user });
+  } catch (error) {
+    next(error);
+  }
+});
 
-
-
-  });
-})
 router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect("/")
@@ -65,13 +74,13 @@ router.get("/product", (req, res) => {
   })
 })
 router.get("/product-details/:name", async (req, res) => {
-
+  let user = req.session.user
   let productName = req.params.name;
   console.log(productName)
   const product = await productHelper.getProductByName(productName);
   const similarProducts = await productHelper.getSimilarProducts(productName);
 
-  res.render("user/product-details", { product, similarProducts });
+  res.render("user/product-details", { product, similarProducts, user });
 });
 const verifyLogin = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -97,13 +106,13 @@ router.post("/forgot-password", async (req, res) => {
   const email = req.body.email;
   console.log(email)
   try {
-    const token= userHelper.generateToken()
+    const token = userHelper.generateToken()
     await userHelper.updateUserResetToken(email, token);
     console.log(token)
     const resetLink = `http://localhost:3000/reset-password?token=${token}`;
     await userHelper.sendPasswordResetEmail(email, resetLink);
 
- 
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Internal server error" });
@@ -118,7 +127,7 @@ router.get("/reset-password", async (req, res) => {
 router.post("/reset-password/:token", async (req, res) => {
   const token = req.params.token;  // Access the token from the URL params using req.params
   const password = req.body.password;
-  
+
   try {
     const user = await userHelper.getUserByResetToken(token);
     console.log(user);
