@@ -87,7 +87,7 @@ module.exports = {
       }
     }
   },
-  
+
 
 
 
@@ -136,18 +136,18 @@ module.exports = {
   updatePassword: (userId, password) => {
 
     return new Promise(async (resolve, reject) => {
-      try{
-      console.log(password)
-      console.log(userId)
-      const hashedPassword = await bcrypt.hash(password, 10);
-      let userCollection = db.get().collection(collection.USER_COLLECTION)
-      await userCollection.updateOne(
-        { _id: new ObjectId(userId) },
-        { $set: { Password:hashedPassword}, $unset: { resetToken: "" } }
-      )
-      resolve()
+      try {
+        console.log(password)
+        console.log(userId)
+        const hashedPassword = await bcrypt.hash(password, 10);
+        let userCollection = db.get().collection(collection.USER_COLLECTION)
+        await userCollection.updateOne(
+          { _id: new ObjectId(userId) },
+          { $set: { Password: hashedPassword }, $unset: { resetToken: "" } }
+        )
+        resolve()
       }
-      catch(err){
+      catch (err) {
         reject(err)
       }
     })
@@ -157,15 +157,30 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let userCart = await db.get().collection(collection.Cart_Collection).findOne({ user: new ObjectId(userId) })
       if (userCart) {
-        db.get().collection(collection.Cart_Collection).updateOne({ user: new ObjectId(userId) }, {
-          $push: { products: new ObjectId(proId) }
-        }).then((response) => {
-          resolve(response)
-        })
+        let productExist = userCart.products.find(product => product.item== proId)
+        if (productExist) {
+          db.get().collection(collection.Cart_Collection).updateOne(
+            { "products.item": new ObjectId(proId) },
+            {
+              $inc: { 'products.$.quantity': 1 }
+            }
+          ).then((response) => {
+            resolve(response)
+          })
+        } else {
+          db.get().collection(collection.Cart_Collection).updateOne(
+            { user: new ObjectId(userId) },
+            {
+              $push: { products: { item: new ObjectId(proId), quantity: 1 } }
+            }
+          ).then((response) => {
+            resolve(response)
+          })
+        }
       } else {
         let CartObj = {
           user: new ObjectId(userId),
-          products: [new ObjectId(proId)]
+          products: [{ item: new ObjectId(proId), quantity: 1 }]
         }
         db.get().collection(collection.Cart_Collection).insertOne(CartObj).then((response) => {
           resolve(response)
@@ -183,31 +198,32 @@ module.exports = {
             }
           },
           {
+            $unwind: '$products'
+          },
+          {
+            $project: {
+              item: '$products.item',
+              quantity: '$products.quantity'
+            }
+          },
+          {
             $lookup: {
               from: collection.PRODUCT,
-              let: { proList: "$products" },
-              pipeline: [
-                {
-                  $match: {
-                    $expr: {
-                      $in: ["$_id", "$$proList"]
-                    }
-                  }
-                }
-              ],
-              as: "cartItems"
+              localField: 'item',
+              foreignField: '_id',
+              as: 'product'
             }
           }
         ]).toArray();
         if (cartItems.length > 0) {
-          resolve(cartItems[0].cartItems);
+          console.log(cartItems[0].product)
+          resolve(cartItems);
         } else {
-          resolve([]); // Return an empty array if no cart items found
+          resolve([]);
         }
       } catch (error) {
         reject(error);
       }
     });
   }
-
-}
+}  

@@ -5,7 +5,7 @@
             <div class="row gy-3">
                 <!-- Left elements -->
                 <div class="col-lg-2 col-sm-4 col-4">
-                    <a href="/" target="_blank" class="float-start">
+                    <a href="/" class="float-start">
                         <img src="/images/tlx-logo.png" height="100" />
                     </a>
                 </div>
@@ -16,28 +16,28 @@
                     <div class="d-flex float-end mt-4">
                         {{#if user}}
                         <a href="/" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
-                            target="_blank">
+                            >
                             <i class="fas fa-user-alt m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">{{user.Name}}</p>
                         </a>
                         <a href="/logout" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
-                            target="_blank">
+                            >
                             <i class="fas fa-user-alt m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">Logout</p>
                         </a>
                         <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center"
-                            target="_blank">
+                            >
                             <i class="fas fa-shopping-cart m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">My Cart</p>
                         </a>
                         {{else}}
                         <a href="/signup" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
-                            target="_blank">
+                            >
                             <i class="fas fa-user-alt m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">Sign Up</p>
                         </a>
                         <a href="/login" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
-                            target="_blank">
+                            >
                             <i class="fas fa-user m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">Login</p>
                         </a>

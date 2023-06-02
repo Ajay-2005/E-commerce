@@ -125,7 +125,7 @@ router.get("/reset-password", async (req, res) => {
   res.render("user/reset-password", { token })
 })
 router.post("/reset-password/:token", async (req, res) => {
-  const token = req.params.token;  // Access the token from the URL params using req.params
+  const token = req.params.token;  
   const password = req.body.password;
 
   try {
