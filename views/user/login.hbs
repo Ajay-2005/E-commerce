@@ -3,26 +3,26 @@
   <form method="post" action="/login">
     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in your account</p>
     {{#if loginErr}}
-    <p id="err" align="center" style="color: red;">{{loginErr}}</p>
+    <p id="err" align="center" style="color: rgb(9, 9, 9);">{{loginErr}}</p>
     {{/if}}
-    
+
     <div class="form-outline mb-4">
       <label class="form-label" for="form2Example1">Email address</label>
       <input type="email" name="Email" id="form2Example1" class="form-control form-control-sm" />
 
     </div>
 
-  
+
     <div class="form-outline mb-4">
       <label class="form-label" for="form2Example2">Password</label>
       <input type="password" id="form2Example2" name="Password" class="form-control form-control-sm" />
 
     </div>
 
-    
+
     <div class="row mb-4">
       <div class="col d-flex justify-content-center">
-        
+
         <div class="form-check">
           <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
           <label class="form-check-label" for="form2Example31">Remember me</label>
@@ -30,34 +30,19 @@
       </div>
 
       <div class="col">
-        
+
         <a href="/forgot-password">Forgot password?</a>
 
       </div>
     </div>
-
-    
-    <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-    
     <div class="text-center">
-      <p>Not a member? <a href="#!">Register</a></p>
-      <p>or sign up with:</p>
-      <div>
-        <button type="submit" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-facebook-f"></i>
-        </button>
-
-        <button type="submit" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-google"></i>
-        </button>
-
-        <button type="submit" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-twitter"></i>
-        </button>
-
-
-      </div>
+      <p>Not a member? <a href="/signup">Register</a></p>
     </div>
+
+    <button type="submit" class="btn btn-primary btn-block mb-4 align-center" style="display:block;margin:auto">Sign
+      in</button>
+
+
+
   </form>
 </div>

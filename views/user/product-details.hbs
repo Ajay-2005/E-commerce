@@ -54,8 +54,9 @@
             </main>
         </div>
         <hr />
+        {{#if similarProducts}}
         <div>
-            <h2 class="text-center mx-3 my-3">Similar Products</h1>
+            <h2 class="text-center mx-3 my-3">Similar  Products</h1>
         </div>
         {{#each similarProducts}}
         <div class="row gx-5 my-4">
@@ -115,4 +116,5 @@
         {{/each}}
 
     </div>
+    {{/if}}
 </section>

@@ -7,8 +7,8 @@ const crypto = require("crypto")
 const { token } = require("morgan")
 const { ObjectId } = require("mongodb");
 const { response } = require("express")
-const { promises } = require("dns")
-const { rejects } = require("assert")
+
+
 module.exports = {
   doSignup: (userData) => {
     return new Promise(async (resolve, reject) => {
@@ -87,11 +87,6 @@ module.exports = {
       }
     }
   },
-
-
-
-
-
   sendPasswordResetEmail: async (email, resetLink) => {
     try {
 
@@ -102,10 +97,6 @@ module.exports = {
           pass: process.env.EMAIL_PASSWORD,
         },
       });
-
-
-
-
       const mailOptions = {
         from: process.env.Email,
         to: email,
@@ -116,7 +107,6 @@ module.exports = {
 
       const info = await transporter.sendMail(mailOptions);
       console.log('Email sent:', info.response);
-
     } catch (error) {
       console.log(error);
       throw error;
@@ -225,5 +215,6 @@ module.exports = {
         reject(error);
       }
     });
-  }
+  },
+
 }  

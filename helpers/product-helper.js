@@ -56,14 +56,7 @@ getProductByName: (productName) => {
           throw new Error('Product not found');
         }
 
-        const similarProducts = await db
-          .get()
-          .collection(collection.PRODUCT)
-          .aggregate([
-            { $match: { name: { $ne: productName } } },
-            { $limit: 6}, // Limit the number of similar products to display
-          ])
-          .toArray();
+        const similarProducts=await db.get().collection(collection.PRODUCT).find({category:product.category,name: { $ne: productName }}).toArray();
 
         resolve(similarProducts);
       } catch (error) {

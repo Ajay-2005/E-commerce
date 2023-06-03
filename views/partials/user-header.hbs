@@ -1,6 +1,6 @@
-<!-- Jumbotron -->
+
 <header>
-    <div class="p-3 text-center bg-white border-bottom">
+    <div class="p-3 text-center  border-bottom" style="background-color:white">
         <div class="container">
             <div class="row gy-3">
                 <!-- Left elements -->
@@ -9,13 +9,10 @@
                         <img src="/images/tlx-logo.png" height="100" />
                     </a>
                 </div>
-                <!-- Left elements -->
-
-                <!-- Center elements -->
                 <div class="order-lg-last col-lg-5 col-sm-8 col-8">
                     <div class="d-flex float-end mt-4">
                         {{#if user}}
-                        <a href="/" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
+                        <a href="/profile" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
                             >
                             <i class="fas fa-user-alt m-1 me-md-2"></i>
                             <p class="d-none d-md-block mb-0">{{user.Name}}</p>
@@ -28,7 +25,7 @@
                         <a href="/cart" class="border rounded py-1 px-3 nav-link d-flex align-items-center"
                             >
                             <i class="fas fa-shopping-cart m-1 me-md-2"></i>
-                            <p class="d-none d-md-block mb-0">My Cart</p>
+                            <p class="d-none d-md-block mb-0">Cart</p>
                         </a>
                         {{else}}
                         <a href="/signup" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"
@@ -43,12 +40,7 @@
                         </a>
                         {{/if}}
                     </div>
-                </div>
-
-
-                <!-- Center elements -->
-
-                <!-- Right elements -->
+                </div>     
                 <div class="col-lg-5 col-md-12 col-12">
                     <form action="/" method="GET">
                         <div class="input-group mt-4">
@@ -63,8 +55,6 @@
                         </div>
                     </form>
                 </div>
-
-                <!-- Right elements -->
             </div>
         </div>
     </div>

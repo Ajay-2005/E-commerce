@@ -76,6 +76,7 @@ router.get("/product", (req, res) => {
 router.get("/product-details/:name", async (req, res) => {
   let user = req.session.user
   let productName = req.params.name;
+  
   console.log(productName)
   const product = await productHelper.getProductByName(productName);
   const similarProducts = await productHelper.getSimilarProducts(productName);
