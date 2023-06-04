@@ -147,7 +147,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let userCart = await db.get().collection(collection.Cart_Collection).findOne({ user: new ObjectId(userId) })
       if (userCart) {
-        let productExist = userCart.products.find(product => product.item== proId)
+        let productExist = userCart.products.find(product => product.item == proId)
         if (productExist) {
           db.get().collection(collection.Cart_Collection).updateOne(
             { "products.item": new ObjectId(proId) },
@@ -202,6 +202,13 @@ module.exports = {
               localField: 'item',
               foreignField: '_id',
               as: 'product'
+            },
+          },
+          {
+            $project: {
+              item: 1, quantity: 1, product: {
+                $arrayElemAt: ['$product', 0]
+              }
             }
           }
         ]).toArray();
@@ -216,5 +223,33 @@ module.exports = {
       }
     });
   },
+  changeQuantity: (data) => {
+    return new Promise((resolve, reject) => {
+      db.get()
+        .collection(collection.Cart_Collection)
+        .updateOne(
+          {
+            _id: new ObjectId(data.cart),
+            "products.item": new ObjectId(data.product)
+          },
+          {
+            $inc: { "products.$.quantity": parseInt(data.count) }
+          }
+        )
+        .then((response) => {
+          console.log(response)
+          resolve(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    })
+  }
 
-}  
+
+
+
+
+
+
+}

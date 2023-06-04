@@ -6,7 +6,7 @@ var logger = require('morgan');
 var session=require("express-session")
 var userRouter = require('./routes/user');
 var adminRouter = require('./routes/admin');
-
+const bodyParser = require('body-parser')
 const hbs = require('express-handlebars');
 var db=require('./config/mongo connection')
 var fileUpload=require('express-fileupload');

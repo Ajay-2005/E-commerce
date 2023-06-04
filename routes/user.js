@@ -142,6 +142,18 @@ router.post("/reset-password/:token", async (req, res) => {
     console.log(error);
   }
 });
+router.post("/change-quantity", (req, res) => {
+  console.log(req.body);
+  userHelper.changeQuantity(req.body)
+    .then(() => {
+      res.redirect('/cart');
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('An error occurred while updating the quantity');
+    });
+});
+
 
 
 module.exports = router;
