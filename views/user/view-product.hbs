@@ -16,17 +16,45 @@
     </button>
   </div>
 </div>
-<div 
-
+<div>
+  <div class="heading mt-4">
+    <h3 class="text-center">Our store categories</h3>
+    <div class="container my-5">
+      <div class="row">
+        <div class="col-md-3">
+          <a href="/?category=smartphone"><img src="/images/download (11).jpg" class="rounded-circle mx-auto d-block mt-2" width="250px" height="250px"/></a>
+        </div>
+      
+        <div class="col-md-3 mt-3">
+          <a href="/?category=Airpod"><img src="/images/download.jpg" class="rounded-circle mx-auto d-block mt-2" width="250px" height="250px"/></a>
+        </div>
+        
+        <div class="col-md-3 mt-3">
+          <a href="/?category=laptop"><img src="/images/images.jpg" class="rounded-circle mx-auto d-block" width="250px" height="250px"/></a>
+        </div>
+         
+         <div class="col-md-3 mt-3">
+          <a href="/?category=smartwatch"><img src="/images/watch.jpg" class="rounded-circle mx-auto d-block" width="250px" height="250px"/></a>
+        </div>
+         
+      </div>
+    </div>
+  </div>
+<div class="heading mt-4">
+   <h3 class="text-center">Latest products</h3>
+   
+</div>
+</div>
 <section style="background-color: #fff;">
   <div class="container py-5">
     <div class="row">
       {{#if product}}
       {{#each product}}
+      
       <div class="col-md-12 col-lg-4 mb-4 mb-lg-0 mt-4 col-sm-6">
         <div class="card">
           <a href="/product-details/{{this.name}}">
-            <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="Laptop" width="250px"
+            <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="{{this.category}}" width="200px"
               height="250px" />
           </a>
           <div class="card-body">
@@ -44,6 +72,7 @@
           </div>
         </div>
       </div>
+     
       {{/each}}
       {{else}}
       <p>No products found.</p>

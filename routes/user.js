@@ -9,14 +9,20 @@ router.get('/', async (req, res, next) => {
     
     let product = await productHelper.getAllProduct();
     let keyword = req.query.keyword;
+    let category=req.query.category;
   
     if (keyword) {
       product = product.filter((product) => {
         return product.name.toLowerCase().includes(keyword.toLowerCase());
       });
     }
+    if(category){
+      product=product.filter((product)=>{
+        return product.category.toLowerCase()==category.toLowerCase();
+      });
+    }
   
-    console.log(product);
+   
     res.render('user/view-product', { product, user });
   } catch (error) {
     next(error);
@@ -153,7 +159,17 @@ router.post("/change-quantity", (req, res) => {
       res.status(500).send('An error occurred while updating the quantity');
     });
 });
-
+router.get("/remove-cart/:id",async (req,res)=>{
+  let ProId=req.params.id;
+  console.log(ProId)
+  await userHelper.deleteCartQuantity(ProId).then(()=>{
+    res.redirect("/cart")
+  })
+  .catch((error)=>{
+    console.log(error)
+    res.status(500).send("Error")
+  })
+})
 
 
 module.exports = router;

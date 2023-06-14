@@ -7,6 +7,8 @@ const crypto = require("crypto")
 const { token } = require("morgan")
 const { ObjectId } = require("mongodb");
 const { response } = require("express")
+const { resolve } = require("path")
+const { count } = require("console")
 
 
 module.exports = {
@@ -224,32 +226,52 @@ module.exports = {
     });
   },
   changeQuantity: (data) => {
+    data.quantity = parseInt(data.quantity);
+    data.count = parseInt(data.count);
+  
     return new Promise((resolve, reject) => {
-      db.get()
-        .collection(collection.Cart_Collection)
-        .updateOne(
+      if (data.count == 0 && data.quantity == 1) {
+        db.get().collection(collection.Cart_Collection).updateOne(
+          { _id: new ObjectId(data.cart) },
+          { $pull: { products: { item: new ObjectId(data.product) } } }
+        ).then(() => {
+          resolve(true);
+        }).catch((error) => {
+          reject(error);
+        });
+      } else {
+        db.get().collection(collection.Cart_Collection).updateOne(
           {
             _id: new ObjectId(data.cart),
             "products.item": new ObjectId(data.product)
           },
           {
-            $inc: { "products.$.quantity": parseInt(data.count) }
+            $inc: { "products.$.quantity": data.count }
           }
-        )
-        .then((response) => {
-          console.log(response)
-          resolve(response);
-        })
-        .catch((error) => {
+        ).then(() => {
+          resolve(true);
+        }).catch((error) => {
           reject(error);
         });
-    })
-  }
-
-
-
-
-
-
-
+      }
+    });
+  },
+  
+  deleteCartQuantity: async (proId) => {
+    return new Promise((resolve, reject) => {
+      db.get().collection(collection.Cart_Collection).updateOne(
+        { products: { $elemMatch: { item: new ObjectId(proId) } } },
+        { $pull: { products: { item: new ObjectId(proId) } } }
+      )
+        .then((response) => {
+        
+          console.log(response);
+          resolve(response);
+          
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
 }

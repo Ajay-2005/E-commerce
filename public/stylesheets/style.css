@@ -1,0 +1,21 @@
+/* Animation keyframes */
+@keyframes marquee {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+/* Mobile media query */
+@media (max-width: 767px) {
+    #search-container {
+      position: relative;
+      overflow: hidden;
+    }
+  
+    #example-search-input {
+      animation: marquee 10s linear infinite;
+    }
+  }
+    
