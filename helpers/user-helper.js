@@ -225,38 +225,30 @@ module.exports = {
       }
     });
   },
-  changeQuantity: (data) => {
-    data.quantity = parseInt(data.quantity);
-    data.count = parseInt(data.count);
-  
+  changeQuantity: (details) => {
+    details.count=parseInt(details.count)
+    details.count=parseInt(details.count)
     return new Promise((resolve, reject) => {
-      if (data.count == 0 && data.quantity == 1) {
-        db.get().collection(collection.Cart_Collection).updateOne(
-          { _id: new ObjectId(data.cart) },
-          { $pull: { products: { item: new ObjectId(data.product) } } }
-        ).then(() => {
-          resolve(true);
-        }).catch((error) => {
-          reject(error);
-        });
-      } else {
-        db.get().collection(collection.Cart_Collection).updateOne(
-          {
-            _id: new ObjectId(data.cart),
-            "products.item": new ObjectId(data.product)
-          },
-          {
-            $inc: { "products.$.quantity": data.count }
-          }
-        ).then(() => {
-          resolve(true);
-        }).catch((error) => {
-          reject(error);
-        });
+       if (details.count == -1 && details.quantity == 1) {
+        db.get().collection(collection.Cart_Collection)
+          .updateOne({ _id: new ObjectId(details.cart) }, {
+            $pull: { products: { item: new ObjectId(details.product) } }
+          }).then((response) => {
+            resolve({ removeProduct: true })
+          })
+      } else { 
+        db.get().collection(collection.Cart_Collection)
+          .updateOne({ _id: new ObjectId(details.cart),'products.$.items':new ObjectId(details.product)},
+            {
+              $inc: { 'products.$.quantity':details.count}
+            }).then((response) => {
+              resolve({ status: true });
+            })
       }
-    });
+    })
   },
-  
+
+
   deleteCartQuantity: async (proId) => {
     return new Promise((resolve, reject) => {
       db.get().collection(collection.Cart_Collection).updateOne(
@@ -264,10 +256,10 @@ module.exports = {
         { $pull: { products: { item: new ObjectId(proId) } } }
       )
         .then((response) => {
-        
+
           console.log(response);
           resolve(response);
-          
+
         })
         .catch((err) => {
           reject(err);

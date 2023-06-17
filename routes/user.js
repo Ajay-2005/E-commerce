@@ -147,18 +147,20 @@ router.post("/reset-password/:token", async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-});
+})
 router.post("/change-quantity", (req, res) => {
   console.log(req.body);
   userHelper.changeQuantity(req.body)
-    .then(() => {
-      res.redirect('/cart');
+    .then((response) => {
+      res.json(response)
     })
     .catch((error) => {
       console.error(error);
       res.status(500).send('An error occurred while updating the quantity');
     });
 });
+
+
 router.get("/remove-cart/:id",async (req,res)=>{
   let ProId=req.params.id;
   console.log(ProId)

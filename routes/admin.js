@@ -5,9 +5,9 @@ var productHelper=require('../helpers/product-helper')
 router.get('/', function(req, res, next) {
 productHelper.getAllProduct().then((product)=>{
   console.log(product);
-  res.render('admin/view-product',{admin:true,product});
+  res.render('admin/admin-signup',{admin:true,product});
 })
-
+router.post("/admin-signup")
 }); 
 router.get('/add-product',(req,res)=>{
   res.render('admin/add-product')
