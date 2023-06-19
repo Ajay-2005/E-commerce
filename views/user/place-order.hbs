@@ -1,0 +1,76 @@
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Enter the Delivery Details</h2>
+        </div>
+        <div class="col-md-7 mt-3">
+            <form id="checkout-form" action="" class="g-3 need-validation" novalidate>
+                <div class="form-group position-relative">
+                    <label for="" class="form-label">Address</label>
+                    <div class="form-outline">
+                        <textarea class="form-control" id="textAreaExample1" rows="4" placeholder="Enter your address"></textarea>
+
+                    </div>
+                    <div class="valid-tooltip">
+                        Looks good!
+                    </div>
+                    <div class="invalid-tooltip">
+                        Please enter valid address!
+                    </div>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="">Pincode</label>
+                    <input type="number" class="form-control" placeholder="Enter pincode" name="pincode" required>
+                    <div class="valid-tooltip">
+                        Looks good!
+                    </div>
+                    <div class="invalid-tooltip">
+                        Please enter your pincode!
+                    </div>
+                </div>
+
+                <div class="form-group position-relative">
+                    <label for="">Mobile</label>
+                    <input type="tel" class="form-control" placeholder="Enter mobile" name="mobile" required>
+                    <div class="valid-tooltip">
+                        Looks good!
+                    </div>
+                    <div class="invalid-tooltip">
+                        Please enter your mobile number!
+                    </div>
+                </div>
+        </div>
+        <div class="col-md-5 was-validated mt-3">
+            <div class="p-3" style="border: 1px solid lightgrey;border-radius: 4px;">
+                <h4>Total Amount: Rs. {{total}}</h4>
+                <hr>
+                <p>Payment method</p>
+
+                <div class="form-check">
+                    <input type="radio" id="validationFormCheck1" class="form-check-input" value="COD"
+                        name="payment-method" required />
+                    <label class="form-check-label" for="validationFormCheck2">Cash on Delivery</label>
+                    <div class="invalid-feedback">Select atleast one payment method</div>
+                </div>
+                <div class="form-check mb-3">
+                    <input type="radio" id="validationFormCheck2" class="form-check-input" value="ONLINE"
+                        name="payment-method" required />
+                    <label class="form-check-label" for="">Online payment</label>
+                </div>
+                <input type="text" name="userId" value="{{user._id}}" hidden>
+                <input type="text" name="userName" value="{{user.name}}" hidden>
+                <div class="row p-1 pr-3">
+                    <button class="btn btn-primary ml-auto" type="submit">Checkout</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+</form>
+</div>
+</div>
+
+</div>

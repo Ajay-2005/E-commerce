@@ -98,8 +98,10 @@ const verifyLogin = (req, res, next) => {
 }
 router.get("/cart", verifyLogin, async (req, res) => {
   let product = await userHelper.getCartProducts(req.session.user._id)
-  console.log(product)
-  res.render("user/cart", { product, user: req.session.user })
+  let total=await userHelper.getTotalAmount(req.session.user._id)
+  console.log(total)
+  
+  res.render("user/cart", { product, user: req.session.user,total})
 })
 router.get("/add-to-cart/:id", verifyLogin, async (req, res) => {
   userHelper.addToCart(req.params.id, req.session.user._id).then(() =>
@@ -149,9 +151,11 @@ router.post("/reset-password/:token", async (req, res) => {
   }
 })
 router.post("/change-quantity", (req, res) => {
-  console.log(req.body);
+  
   userHelper.changeQuantity(req.body)
     .then((response) => {
+      
+      console.log(response)
       res.json(response)
     })
     .catch((error) => {
@@ -165,6 +169,7 @@ router.get("/remove-cart/:id",async (req,res)=>{
   let ProId=req.params.id;
   console.log(ProId)
   await userHelper.deleteCartQuantity(ProId).then(()=>{
+    console.log(res)
     res.redirect("/cart")
   })
   .catch((error)=>{
@@ -172,6 +177,9 @@ router.get("/remove-cart/:id",async (req,res)=>{
     res.status(500).send("Error")
   })
 })
-
+router.get("/place-order",verifyLogin,async (req,res)=>{
+  let total=await userHelper.getTotalAmount(req.session.user._id)
+  res.render("user/place-order",{total})
+})
 
 module.exports = router;

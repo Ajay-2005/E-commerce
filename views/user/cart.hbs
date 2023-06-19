@@ -1,83 +1,89 @@
-<section class="h-100 h-custom" style="background-color: #fff;">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12">
-                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
-                    <div class="card-body p-0">
-                        <div class="row g-0">
-                            <div class="col-lg-8">
-                                <div class="p-5">
-                                    <div class="d-flex justify-content-between align-items-center mb-5">
-                                        <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                                    </div>
-                                    <hr class="my-4">
-                                    {{#each product}}
-                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
-                                        <div class="col-md-2 col-lg-2 col-xl-2">
-                                            <img src="/product-images/{{this.product._id}}.jpeg" class="img-fluid rounded-3">
-                                        </div>
-                                        <div class="col-md-3 col-lg-3 col-xl-3">
-                                            <h6 class="text-black mb-0">{{this.product.name}}</h6>
-                                        </div>
-                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                            <h6 class="mb-0">{{this.product.Price}}</h6>
-                                        </div>
-                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                            <button class="btn btn-link px-2" id="decrement/{{this._id}}"
-                                                onclick='changeQuantity("{{this._id}}","{{this.product._id}}",-1)'>
-                                                <i class="fas fa-minus"></i>
-                                            </button>
-                                            <span id="{{this.product._id}}" class="px-2 py-1">{{this.quantity}}</span>
-                                            <button class="btn btn-link px-2"
-                                                onclick='changeQuantity("{{this._id}}","{{this.product._id}}",1)'>
-                                                <i class="fas fa-plus"></i>
-                                            </button>
-                                        </div>
-                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                            <a href="/remove-cart/{{this.product._id}}" class="text-muted"><i class="fas fa-times"></i></a>
-                                        </div>
-                                    </div>
-                                    <hr class="my-4">
-                                    {{/each}}
-                                    <div class="pt-5">
-                                        <h6 class="mb-0"><a href="/" class="text-body"><i
-                                                    class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section class="h-100" style="background-color: #fff;">
+  <div class="container h-100 py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-10">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
+
         </div>
+        {{#each product}}
+        <div class="card rounded-3 mb-4">
+          <div class="card-body p-4">
+            <div class="row d-flex justify-content-center align-items-center">
+              <div class="col-md-2 col-lg-2 col-xl-2">
+                <img src="/product-images/{{this.product._id}}.jpeg" class="img-fluid rounded-3" alt="Cotton T-shirt">
+              </div>
+              <div class="col-md-3 col-lg-3 col-xl-3">
+                <p class="lead fw-normal mb-2">{{this.product.name}}</p>
+
+              </div>
+              <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                <button class="btn btn-link px-2" onclick='changeQuantity("{{this._id}}","{{this.product._id}}",-1)'>
+                  <i class="fas fa-minus"></i>
+                </button>
+                <span id="{{this.product._id}}" class="px-2 py-1">{{this.quantity}}</span>
+
+                <button class="btn btn-link px-2 " onclick='changeQuantity("{{this._id}}","{{this.product._id}}",1)'>
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+              <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                <h5 class="mb-0 mt-3">{{this.product.Price}}</h5>
+              </div>
+              <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                <a href="remove-cart/{{this.product._id}}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+
+        <div class="d-flex justify-content-between p-2 mb-2 mx-3" style="background-color: #fff">
+          <h5 class="fw-bold mb-0 mx-5">Total:</h5>
+          <h5 class="fw-bold mb-0 mx-5">{{total}}</h5>
+        </div>
+
+
+
+
+        <div class="card">
+          <div class="card-body">
+            <a href="/place-order" class="btn btn-warning btn-block btn-lg float-end">Proceed to
+                Pay</button></a>
+          </div>
+        </div>
+
+      </div>
     </div>
+  </div>
 </section>
 <script>
-    function changeQuantity(cartId, proId, count) {
-        let quantity=parseInt(document.getElementById(proId).innerHTML)
-        $.ajax({
-            url: "/change-quantity",
-            method: "POST",
-            data: {
-                cart: cartId,
-                product: proId,
-                count: count,
-                quantity:quantity
-            },
-            success: function (response) {
-               
-                    if(response.removeProduct){
-                    alert("Product removed from cart")
-                    location.reload()
-                    }
-                 else{
-                    document.getElementById(proId).innerHTML=quantity+count
-                }
-            },
-            error: function (error) {
-                console.error(error);
-            }
-        });
-        
-    }
+  function changeQuantity(cartId, proId, count) {
+    let quantity = parseInt(document.getElementById(proId).innerHTML)
+    $.ajax({
+      url: "/change-quantity",
+      method: "POST",
+      data: {
+        cart: cartId,
+        product: proId,
+        count: count,
+        quantity: quantity
+      },
+      success: async function (response) {
+
+        if (response.removeProduct) {
+          await swal("Product removed from cart", "", "warning")
+          location.reload()
+        }
+        else {
+          document.getElementById(proId).innerHTML = quantity + count
+        }
+      },
+      error: function (error) {
+        console.error(error);
+      }
+    });
+
+  }
 </script>
