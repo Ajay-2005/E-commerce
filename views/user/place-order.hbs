@@ -8,7 +8,8 @@
                 <div class="form-group position-relative">
                     <label for="" class="form-label">Address</label>
                     <div class="form-outline">
-                        <textarea class="form-control" id="textAreaExample1" rows="4" placeholder="Enter your address"></textarea>
+                        <textarea class="form-control" id="textAreaExample1" rows="4" name="address"
+                            placeholder="Enter your address"></textarea>
 
                     </div>
                     <div class="valid-tooltip">
@@ -68,9 +69,18 @@
         </form>
     </div>
 </div>
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault();
+        $.ajax({
+            url: "/place-order",
+            method: "POST",
+            data: $("#checkout-form").serialize(),
+            success: async function (response) {
+                await swal("Order placed successfully", "", "success")
 
-</form>
-</div>
-</div>
 
-</div>
+            }
+        })
+    })
+</script>

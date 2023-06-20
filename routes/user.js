@@ -150,11 +150,12 @@ router.post("/reset-password/:token", async (req, res) => {
     console.log(error);
   }
 })
-router.post("/change-quantity", (req, res) => {
-  
+router.post("/change-quantity",(req, res) => {
+  console.log(req.body)
   userHelper.changeQuantity(req.body)
-    .then((response) => {
-      
+    .then(async (response) => {
+      let total=await userHelper.getTotalAmount(req.body.user)
+      response.total=total
       console.log(response)
       res.json(response)
     })
@@ -179,7 +180,17 @@ router.get("/remove-cart/:id",async (req,res)=>{
 })
 router.get("/place-order",verifyLogin,async (req,res)=>{
   let total=await userHelper.getTotalAmount(req.session.user._id)
-  res.render("user/place-order",{total})
+  res.render("user/place-order",{total,user:req.session.user})
 })
+router.post("/place-order",async (req,res)=>{
+  console.log(req.body)
+  
+  let products=await userHelper.getCartProductList(req.body.userId)
+  console.log(products)
 
+  let total=await userHelper.getTotalAmount(req.body.userId)
+  userHelper.PlaceOrder(req.body,products,total).then((response)=>{
+    res.json(response)
+  })
+})
 module.exports = router;

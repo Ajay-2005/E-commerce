@@ -19,12 +19,12 @@
 
               </div>
               <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                <button class="btn btn-link px-2" onclick='changeQuantity("{{this._id}}","{{this.product._id}}",-1)'>
+                <button class="btn btn-link px-2" onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{../user._id}}",-1)'>
                   <i class="fas fa-minus"></i>
                 </button>
                 <span id="{{this.product._id}}" class="px-2 py-1">{{this.quantity}}</span>
 
-                <button class="btn btn-link px-2 " onclick='changeQuantity("{{this._id}}","{{this.product._id}}",1)'>
+                <button class="btn btn-link px-2 " onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{../user._id}}",1)'>
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
@@ -41,7 +41,7 @@
 
         <div class="d-flex justify-content-between p-2 mb-2 mx-3" style="background-color: #fff">
           <h5 class="fw-bold mb-0 mx-5">Total:</h5>
-          <h5 class="fw-bold mb-0 mx-5">{{total}}</h5>
+          <h5 id="total" class="fw-bold mb-0 mx-5">{{total}}</h5>
         </div>
 
 
@@ -49,7 +49,7 @@
 
         <div class="card">
           <div class="card-body">
-            <a href="/place-order" class="btn btn-warning btn-block btn-lg float-end">Proceed to
+            <a href="/place-order" class="btn btn-primary btn-block btn-lg float-end">Proceed to
                 Pay</button></a>
           </div>
         </div>
@@ -59,12 +59,15 @@
   </div>
 </section>
 <script>
-  function changeQuantity(cartId, proId, count) {
+  function changeQuantity(cartId, proId,userId,count) {
+    console.log(proId)
+    
     let quantity = parseInt(document.getElementById(proId).innerHTML)
     $.ajax({
       url: "/change-quantity",
       method: "POST",
       data: {
+        user:userId,
         cart: cartId,
         product: proId,
         count: count,
@@ -78,6 +81,7 @@
         }
         else {
           document.getElementById(proId).innerHTML = quantity + count
+          document.getElementById('total').innerHTML=response.total
         }
       },
       error: function (error) {
