@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var productHelper = require('../helpers/product-helper')
-var userHelper = require('../helpers/user-helper')
+var userHelper = require('../helpers/user-helper');
+const collection = require('../config/collection');
 /* GET home page. */
 router.get('/', async (req, res, next) => {
   try {
@@ -100,6 +101,10 @@ router.get("/cart", verifyLogin, async (req, res) => {
   let product = await userHelper.getCartProducts(req.session.user._id)
   let total=await userHelper.getTotalAmount(req.session.user._id)
   console.log(total)
+    if(total==" "){
+      res.render("user/cart-empty")
+    }
+
   
   res.render("user/cart", { product, user: req.session.user,total})
 })
@@ -192,5 +197,12 @@ router.post("/place-order",async (req,res)=>{
   userHelper.PlaceOrder(req.body,products,total).then((response)=>{
     res.json(response)
   })
+})
+router.get("/profile",verifyLogin,async (req,res)=>{
+let orders=await userHelper.getUserOrder(req.session.user._id)
+let products=await userHelper.getOrderProducts(req.params._id)
+console.log(products)
+  console.log(orders)
+  res.render("user/my-account",{user:req.session.user,orders,products})
 })
 module.exports = router;

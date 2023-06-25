@@ -9,6 +9,7 @@ const { ObjectId } = require("mongodb");
 const { response } = require("express")
 const { resolve } = require("path")
 const { count } = require("console")
+const { rejects } = require("assert")
 
 
 module.exports = {
@@ -261,11 +262,6 @@ module.exports = {
       }
     });
   },
-
-
-
-
-
   deleteCartQuantity: async (proId) => {
     return new Promise((resolve, reject) => {
       db.get().collection(collection.Cart_Collection).updateOne(
@@ -360,6 +356,64 @@ module.exports = {
       
       resolve(cart.products)
     })
+  },
+  getUserOrder : (userId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const orders = await db
+          .get()
+          .collection(collection.Order_collection)
+          .find({ userId: userId })
+          .toArray();
+        resolve(orders);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+  getOrderProducts:(orderId)=>{
+    console.log(orderId)
+    return new Promise (async (resolve,reject)=>{
+      try{
+        let OrderItems=db.get().collection(collection.Order_collection).aggregate([
+          {
+            $match: {
+              user: new ObjectId(orderId)
+            }
+          },
+          {
+            $unwind: '$product'
+          },
+          {
+            $project: {
+              item: '$product.item',
+              quantity: '$product.quantity'
+            }
+          },
+          {
+            $lookup: {
+              from: collection.PRODUCT,
+              localField: 'item',
+              foreignField: '_id',
+              as: 'order'
+            }
+          },
+          {
+            $project: {
+              item: 1, quantity: 1, order: { $arrayElemAt: ['$order', 0] }
+            }
+          },
+
+        ]).toArray()
+        resolve(OrderItems)
+      
+      
+    }
+    catch(err){
+        console.log(err)
+        reject(err)
+    }
+  })
   }
 
 
