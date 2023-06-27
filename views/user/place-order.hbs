@@ -78,7 +78,7 @@
             data: $("#checkout-form").serialize(),
             success: async function (response) {
                 await swal("Order placed successfully", "", "success")
-
+                location.href="/order-success"
 
             }
         })

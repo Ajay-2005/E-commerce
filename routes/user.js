@@ -198,9 +198,15 @@ router.post("/place-order",async (req,res)=>{
     res.json(response)
   })
 })
+router.get("/order-success",verifyLogin,async (req,res)=>{
+  let orders=await userHelper.getUserOrder(req.session.user._id)
+  console.log(orders)
+  res.render("user/order-sucess",{orders})
+  
+})
 router.get("/profile",verifyLogin,async (req,res)=>{
 let orders=await userHelper.getUserOrder(req.session.user._id)
-let products=await userHelper.getOrderProducts(req.params._id)
+let products=await userHelper.getOrderProducts(orders._id)
 console.log(products)
   console.log(orders)
   res.render("user/my-account",{user:req.session.user,orders,products})
