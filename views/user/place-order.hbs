@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <div class="row d-flex justify-content-center align-items-start">
-        <div class="col-md-12">
+        <div class="col-md-12 mt-3">
             <h2 class="text-center">Enter the Delivery Details</h2>
         </div>
-        <div class="col-md-6 m-3 mt-3">
+        <div class="col-md-6 m-3 mt-3 pt-3">
             <form id="checkout-form" action="" class="g-3 need-validation" novalidate>
                 <div class="form-group position-relative">
                     <label for="" class="form-label">Address</label>
@@ -77,10 +77,46 @@
             method: "POST",
             data: $("#checkout-form").serialize(),
             success: async function (response) {
-                await swal("Order placed successfully", "", "success")
-                location.href="/order-success"
+                
+                  if (response.codsuccess) {
+                        await swal("Order placed successfully", "", "success")
+                        location.href = '/order-placed'
+                    } else {
+                        razorpayPayment(response)
+                    }
 
             }
         })
     })
+    function razorpayPayment(order){
+        var options = {
+    "key":"rzp_test_Dh4P6TYx8t7x2V", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "TrendLynx",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order._id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+    },
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.open()
+
+    }
+
 </script>

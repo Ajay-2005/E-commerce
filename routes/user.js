@@ -194,8 +194,16 @@ router.post("/place-order",async (req,res)=>{
   console.log(products)
 
   let total=await userHelper.getTotalAmount(req.body.userId)
-  userHelper.PlaceOrder(req.body,products,total).then((response)=>{
-    res.json(response)
+  userHelper.PlaceOrder(req.body,products,total).then((orderId)=>{
+    if(req.body['payment-method']=='COD'){
+      res.json({COD:true})
+    }
+    else {
+      userHelper.generateRazorpay(orderId,total).then((response)=>{
+        res.json(response)
+      })
+    }
+  
   })
 })
 router.get("/order-success",verifyLogin,async (req,res)=>{
