@@ -1,17 +1,11 @@
 <section class="py-5">
     <div class="container">
-
         <div class="row gx-5 mt-4">
             <aside class="col-lg-6">
                 <div class="border rounded-4 mb-3 d-flex justify-content-center">
-
                     <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit"
                         src="/product-images/{{product._id}}.jpeg" />
-
                 </div>
-
-                <!-- thumbs-wrap.// -->
-                <!-- gallery-wrap .end// -->
             </aside>
             <main class="col-lg-6">
                 <div class="ps-lg-3">
@@ -32,44 +26,32 @@
                         <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
                         <span class="text-success ms-2">In stock</span>
                     </div>
-
                     <div class="mb-3">
                         <span class="h5">{{product.Price}}</span>
-
                     </div>
-
                     <p>
                         {{product.description}}
                     </p>
-
-
                     <hr />
-
-
-                    <a href="#" class="btn btn-warning shadow-0 px-4 mx-4"> Buy now </a>
-                    <a href="/add-to-cart/{{product._id}}" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart</a>
-
-
+                    <a href="/add-to-cart/{{product._id}}" class="btn btn-primary btn-block mb-4 align-center"
+                        style="display:block;margin:auto;width:100%;"><i class="me-1 fa fa-shopping-basket"></i>Add to
+                        cart
+                    </a>
                 </div>
             </main>
         </div>
         <hr />
         {{#if similarProducts}}
         <div>
-            <h2 class="text-center mx-3 my-3">Similar  Products</h1>
+            <h2 class="text-center mx-3 my-6">Similar Products</h1>
         </div>
         {{#each similarProducts}}
         <div class="row gx-5 my-4">
             <aside class="col-lg-6">
                 <div class="border rounded-4 mb-3 d-flex justify-content-center">
-
                     <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit"
                         src="/product-images/{{this._id}}.jpeg" />
-
                 </div>
-
-                <!-- thumbs-wrap.// -->
-                <!-- gallery-wrap .end// -->
             </aside>
             <main class="col-lg-6">
                 <div class="ps-lg-3">
@@ -93,28 +75,20 @@
 
                     <div class="mb-3">
                         <span class="h5">{{this.Price}}</span>
-
                     </div>
-
                     <p>
                         {{this.description}}
                     </p>
-
-
-                    <hr />
-
-
-                    <a href="#" class="btn btn-warning shadow-0 px-4 mx-4"> Buy now </a>
-                    <a href="/add-to-cart/{{this._id}}" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart
+                    <hr>
+                    <a href="/add-to-cart/{{this._id}}" class="btn btn-primary btn-block mb-4 align-center"
+                        style="display:block;margin:auto;width:100%;"><i class="me-1 fa fa-shopping-basket"></i>Add to
+                        cart
                     </a>
-                    
                 </div>
             </main>
         </div>
         <hr />
-
         {{/each}}
-
     </div>
     {{/if}}
 </section>

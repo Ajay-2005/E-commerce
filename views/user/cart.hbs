@@ -2,29 +2,25 @@
   <div class="container h-100 py-5">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-10">
-
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h3 class="fw-normal mb-0 text-black">Shopping Cart</h3>
-
         </div>
         {{#each product}}
         <div class="card rounded-3 mb-4">
           <div class="card-body p-4">
             <div class="row d-flex justify-content-center align-items-center">
               <div class="col-md-2 col-lg-2 col-xl-2">
-                <img src="/product-images/{{this.product._id}}.jpeg" class="img-fluid rounded-3"  width="300px" height="300px">
+                <img src="/product-images/{{this.product._id}}.jpeg" class="img-fluid rounded-3" width="300px" height="300px">
               </div>
               <div class="col-md-3 col-lg-3 col-xl-3 mt-3 mr-6">
                 <p class="lead fw-normal mb-2">{{this.product.name}}</p>
-
               </div>
               <div class="col-md-3 col-lg-3 col-xl-2 d-flex mt-3 mr-6">
                 <button class="btn btn-link px-2" onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{../user._id}}",-1)'>
                   <i class="fas fa-minus"></i>
                 </button>
                 <span id="{{this.product._id}}" class="px-2 py-1">{{this.quantity}}</span>
-
-                <button class="btn btn-link px-2 " onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{../user._id}}",1)'>
+                <button class="btn btn-link px-2" onclick='changeQuantity("{{this._id}}","{{this.product._id}}","{{../user._id}}",1)'>
                   <i class="fas fa-plus"></i>
                 </button>
               </div>
@@ -32,62 +28,68 @@
                 <h5 class="mb-0 mt-3">{{this.product.Price}}</h5>
               </div>
               <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                <a href="remove-cart/{{this.product._id}}" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                <button class="btn" onclick='deleteCartProduct("{{this.product._id}}")'>
+                  <i class="fas fa-trash fa-lg"></i>
+                </button>
               </div>
             </div>
           </div>
         </div>
         {{/each}}
-
         <div class="d-flex justify-content-between p-2 mb-2 mx-3" style="background-color: #fff">
           <h5 class="fw-bold mb-0 mx-5">Total:</h5>
           <h5 id="total" class="fw-bold mb-0 mx-5">{{total}}</h5>
         </div>
-
-
-
-
         <div class="card">
           <div class="card-body">
-            <a href="/place-order" class="btn btn-primary btn-block btn-lg float-end">Proceed to
-                Pay</button></a>
+            <a href="/place-order" class="btn btn-primary btn-block btn-lg float-end">Proceed to Pay</a>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </section>
 <script>
-  function changeQuantity(cartId, proId,userId,count) {
-    console.log(proId)
-    
-    let quantity = parseInt(document.getElementById(proId).innerHTML)
+  function changeQuantity(cartId, proId, userId, count) {
+    console.log(proId);
+    let quantity = parseInt(document.getElementById(proId).innerHTML);
     $.ajax({
       url: "/change-quantity",
       method: "POST",
       data: {
-        user:userId,
+        user: userId,
         cart: cartId,
         product: proId,
         count: count,
         quantity: quantity
       },
       success: async function (response) {
-
         if (response.removeProduct) {
-          await swal("Product removed from cart", "", "warning")
-          location.reload()
-        }
-        else {
-          document.getElementById(proId).innerHTML = quantity + count
-          document.getElementById('total').innerHTML=response.total
+          await swal("Product removed from cart", "", "warning");
+          location.reload();
+        } else {
+          document.getElementById(proId).innerHTML = quantity + count;
+          document.getElementById('total').innerHTML = response.total;
         }
       },
       error: function (error) {
         console.error(error);
       }
     });
+  }
 
+  function deleteCartProduct(proId) {
+    console.log(proId)
+    $.ajax({
+      url: "/remove-cart",
+      method: "post",
+      data: {
+        proId: proId
+      },
+      success: async (response) => {
+        await swal("Product removed from cart", "", "warning");
+        location.reload()
+      }
+    });
   }
 </script>

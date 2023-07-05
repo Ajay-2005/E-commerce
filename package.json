@@ -25,7 +25,9 @@
     "nodemailer": "^6.9.2",
     "nodemon": "^1.14.9",
     "razorpay": "^2.9.0",
-    "uuid": "^7.0.0"
+    "uuid": "^7.0.0",
+    "request": "^2.88.2"
+
   },
   "devDependencies": {
     "kill-port": "^2.0.1"

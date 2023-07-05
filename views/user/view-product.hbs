@@ -26,7 +26,7 @@
         </div>
       
         <div class="col-md-3 mt-3">
-          <a href="/?category=Airpod"><img src="/images/download.jpeg" class="rounded-circle mx-auto d-block mt-2" width="250px" height="250px"/></a>
+          <a href="/?category=Airpod"><img src="/images/download.jpeg" class="rounded-circle mx-auto d-block mt-2" width="250x" height="250px"/></a>
         </div>
         
         <div class="col-md-3 mt-3">
@@ -52,9 +52,9 @@
       {{#each product}}
       
       <div class="col-md-12 col-lg-4 mb-4 mb-lg-0 mt-4 col-sm-6">
-        <div class="card">
+        <div class="card py-3 px-3" style="border-color:rgb(233, 209, 209);">
           <a href="/product-details/{{this.name}}">
-            <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="{{this.category}}" width="200px"
+            <img src="/product-images/{{this._id}}.jpeg" class="card-img-top" alt="{{this.category}}" width="100px"
               height="250px" />
           </a>
           <div class="card-body">
@@ -65,10 +65,13 @@
               <h5 class="mb-0">{{this.name}}</h5>
               <h5 class="text-dark mb-0">{{this.Price}}</h5>
             </div>
-              <a href="/place-order" class="btn btn-warning shadow-0 mx-3 my-3"> Buy now </a>
-            <a href="/add-to-cart/{{this._id}}" class="btn btn-primary btn-block shadow-0 mx-3 my-3">
-              <i class="me-1 fa fa-shopping-basket"></i> Add to cart
-            </a>
+           
+             <a href="/add-to-cart/{{this._id}}" class="btn btn-primary btn-block mb-4 align-center"
+                        style="display:block;margin:auto;width:100%;"><i class="me-1 fa fa-shopping-basket"></i>Add to
+                        cart
+                    </a>
+         
+            
           </div>
         </div>
       </div>

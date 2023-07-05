@@ -274,10 +274,8 @@ module.exports = {
         { $pull: { products: { item: new ObjectId(proId) } } }
       )
         .then((response) => {
-
           console.log(response);
           resolve(response);
-
         })
         .catch((err) => {
           reject(err);
@@ -349,7 +347,10 @@ module.exports = {
         paymentmethod: order['payment-method']
       }
       db.get().collection(collection.Order_collection).insertOne(OrderObj).then((response) => {
-        resolve(response._id)
+        let id=response.insertedId.toString()
+        let orderId=id.substring(0,24)
+        console.log(orderId)
+        resolve(orderId)
       })
 
     })
@@ -425,19 +426,26 @@ module.exports = {
       var options = {
         amount: total,  // amount in the smallest currency unit
         currency: "INR",
-        receipt: orderId 
+        receipt: orderId + " "
       };
       instances.orders.create(options, function (err, order) {
         if (err) {
           console.log(err)
         } else {
-          console.log("order:",order);
+          console.log("order:", order);
           resolve(order)
         }
-      });
-
+      })
     })
+  },
+
+    
+  verifyPayment: (details) => {
+    let hmac = crypto.createHmac('sha256', process.env.key_secret)
+
+
   }
 
 
 }
+

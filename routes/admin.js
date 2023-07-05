@@ -40,8 +40,8 @@ const { ObjectId } = require('mongodb');
 const userHelper = require('../helpers/user-helper');
 
 router.get('/delete-product/:id', (req, res) => {
-  let productName = req.params.id;
-  console.log(productName)
+  let productId = req.params.id;
+  console.log(productId)
   if (!ObjectId.isValid(productId)) {
     console.log('Invalid productId:', productId);
     return res.redirect('/admin');

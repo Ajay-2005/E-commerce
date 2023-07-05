@@ -101,7 +101,7 @@ router.get("/cart", verifyLogin, async (req, res) => {
   let product = await userHelper.getCartProducts(req.session.user._id)
   let total=await userHelper.getTotalAmount(req.session.user._id)
   console.log(total)
-    if(total==" "){
+    if(total < 1){
       res.render("user/cart-empty")
     }
 
@@ -171,16 +171,16 @@ router.post("/change-quantity",(req, res) => {
 });
 
 
-router.get("/remove-cart/:id",async (req,res)=>{
-  let ProId=req.params.id;
+router.post("/remove-cart",async (req,res)=>{
+  console.log(req.body)
+  let ProId=req.body.proId;
   console.log(ProId)
-  await userHelper.deleteCartQuantity(ProId).then(()=>{
-    console.log(res)
-    res.redirect("/cart")
+  await userHelper.deleteCartQuantity(ProId).then((response)=>{
+    res.json(response)
   })
   .catch((error)=>{
     console.log(error)
-    res.status(500).send("Error")
+    
   })
 })
 router.get("/place-order",verifyLogin,async (req,res)=>{
@@ -189,16 +189,15 @@ router.get("/place-order",verifyLogin,async (req,res)=>{
 })
 router.post("/place-order",async (req,res)=>{
   console.log(req.body)
-  
   let products=await userHelper.getCartProductList(req.body.userId)
   console.log(products)
-
   let total=await userHelper.getTotalAmount(req.body.userId)
   userHelper.PlaceOrder(req.body,products,total).then((orderId)=>{
     if(req.body['payment-method']=='COD'){
       res.json({COD:true})
     }
     else {
+      console.log(orderId)
       userHelper.generateRazorpay(orderId,total).then((response)=>{
         res.json(response)
       })
@@ -219,4 +218,7 @@ console.log(products)
   console.log(orders)
   res.render("user/my-account",{user:req.session.user,orders,products})
 })
+
+
+
 module.exports = router;
