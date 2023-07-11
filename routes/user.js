@@ -44,7 +44,7 @@ router.get('/signup', (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     await userHelper.doSignup(req.body).then((response) => {
-      console.log(response)
+     
       req.session.loggedIn = true
       req.session.user = response
       res.redirect('/')
@@ -67,7 +67,7 @@ router.post('/login', (req, res) => {
     else {
       req.session.loginErr = "invalid Email or Password"
       res.redirect("/login")
-      console.log(response)
+     
     }
   })
 })
@@ -188,9 +188,9 @@ router.get("/place-order",verifyLogin,async (req,res)=>{
   res.render("user/place-order",{total,user:req.session.user})
 })
 router.post("/place-order",async (req,res)=>{
-  console.log(req.body)
+
   let products=await userHelper.getCartProductList(req.body.userId)
-  console.log(products)
+  
   let total=await userHelper.getTotalAmount(req.body.userId)
   userHelper.PlaceOrder(req.body,products,total).then((orderId)=>{
     if(req.body['payment-method']=='COD'){
@@ -204,6 +204,23 @@ router.post("/place-order",async (req,res)=>{
     }
   
   })
+})
+router.post("/verify-Payment",(req,res)=>{
+  console.log(req.body)
+  userHelper.verifyPayment(req.body).then(()=>{
+    userHelper.changePaymentStatus(req.body['reciept']).then(()=>{
+      console.log("Payment-successfully")
+      res.json({status:true})
+    })
+    .catch((err)=>{
+      console.log("payment-failed")
+      res.json({status:false})
+      
+    })
+
+  })
+
+
 })
 router.get("/order-success",verifyLogin,async (req,res)=>{
   let orders=await userHelper.getUserOrder(req.session.user._id)

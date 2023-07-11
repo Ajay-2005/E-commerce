@@ -347,10 +347,8 @@ module.exports = {
         paymentmethod: order['payment-method']
       }
       db.get().collection(collection.Order_collection).insertOne(OrderObj).then((response) => {
-        let id=response.insertedId.toString()
-        let orderId=id.substring(0,24)
-        console.log(orderId)
-        resolve(orderId)
+
+        resolve(response.insertedId.toString())
       })
 
     })
@@ -424,28 +422,41 @@ module.exports = {
   generateRazorpay: (orderId, total) => {
     return new Promise((resolve, reject) => {
       var options = {
-        amount: total,  // amount in the smallest currency unit
+        amount: total,
         currency: "INR",
-        receipt: orderId + " "
+        receipt: "orderId" + orderId
       };
       instances.orders.create(options, function (err, order) {
         if (err) {
-          console.log(err)
+          console.log(err);
+          reject(err);
         } else {
           console.log("order:", order);
           resolve(order)
         }
-      })
+      });
     })
   },
-
-    
-  verifyPayment: (details) => {
-    let hmac = crypto.createHmac('sha256', process.env.key_secret)
-
-
+  verifyPayment: (order) => {
+    return new Promise((resolve, reject) => {
+      let hmac = crypto.createHmac('sha256', process.env.key_secret)
+      hmac.update(order['payment[razropay_orderId]'] + '|' + order['payment[razropay_payment_Id']);
+      hmac = hmac.digest('hex')
+      if (hmac == order['payment[razropay_signature']) {
+        resolve()
+      } else {
+        reject()
+      }
+    })
+  },
+  changePaymentStatus: (orderId) => {
+    return new Promise((resolve, reject) => {
+      db.get().collection(collection.Order_collection).updateOne({ _id: new ObjectId(orderId) }), {
+        $set: {
+          status: "confirmed"
+        }
+      }
+    })
   }
-
-
 }
 

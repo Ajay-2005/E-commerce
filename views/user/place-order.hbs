@@ -98,13 +98,11 @@
             "currency": "INR",
             "name": "TrendLynx",
             "description": "Test Transaction",
-            "image": "https://example.com/your_logo",
-            "order_id": order._id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+           
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
             "handler": function (response) {
-                
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature)
+                console.log(response)
+               
                 verifyPayment(response, order)
             },
             "prefill": {

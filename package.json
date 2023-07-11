@@ -23,11 +23,10 @@
     "mongoose": "^7.0.4",
     "morgan": "~1.9.1",
     "nodemailer": "^6.9.2",
-    "nodemon": "^2.0.22",
-    "razorpay": "^2.9.0",
-    "uuid": "^7.0.0",
-    "request": "^2.88.2"
-
+    "nodemon": "^3.0.1",
+    "razorpay": "^0.0.0",
+    "request": "^9.5.1",
+    "uuid": "^7.0.0"
   },
   "devDependencies": {
     "kill-port": "^2.0.1"

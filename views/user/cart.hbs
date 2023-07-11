@@ -51,7 +51,7 @@
 </section>
 <script>
   function changeQuantity(cartId, proId, userId, count) {
-    console.log(proId);
+   
     let quantity = parseInt(document.getElementById(proId).innerHTML);
     $.ajax({
       url: "/change-quantity",
@@ -79,7 +79,7 @@
   }
 
   function deleteCartProduct(proId) {
-    console.log(proId)
+    
     $.ajax({
       url: "/remove-cart",
       method: "post",
