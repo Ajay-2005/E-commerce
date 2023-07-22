@@ -12,7 +12,7 @@ const verifyLogin=(req,res,next)=>{
 }
 router.get('/',verifyLogin,(req, res)=>{
   productHelper.getAllProduct().then((product)=>{
-    console.log(product);
+  
     res.render('admin/view-product',{admin:true,product});
   })
 })
@@ -20,22 +20,27 @@ router.get('/add-product',(req,res)=>{
   res.render('admin/add-product')
 
 })
-router.post('/add-product',(req,res)=>{
-  console.log(req.body)
-  console.log(req.files.image)
-  productHelper.addProduct(req.body,(insertedId)=>{
-    let image=req.files.image
-  image.mv('./public/product-images/'+insertedId+'.jpeg',(err,done)=>{
-    if(!err){
-      res.render("admin/add-product")
-    }else{
-      console.log(err);
-    }
-    
-  })
- 
-  })
-})
+const path = require('path');
+
+router.post('/add-product', (req, res) => {
+  console.log(req.body);
+  
+
+  productHelper.addProduct(req.body, (insertedId) => {
+    let image = req.files.image;
+    let fileExtension = path.extname(image.name);
+    let fileName = insertedId + fileExtension;
+
+    image.mv('./public/product-images/' + fileName, (err, done) => {
+      if (!err) {
+        res.render('admin/add-product');
+      } else {
+        console.log(err);
+      }
+    });
+  });
+});
+
 const { ObjectId } = require('mongodb');
 const userHelper = require('../helpers/user-helper');
 
@@ -55,7 +60,7 @@ router.get('/delete-product/:id', (req, res) => {
 router.get("/edit-product/:name",async (req,res)=>{
   let productName=req.params.name
   let product=await productHelper.getProductByName(productName)
-  console.log(product)
+  
   res.render("admin/edit-product",{product})
 })
 router.post("/edit-product/:name",async(req,res)=>{
@@ -90,6 +95,10 @@ router.post('/login', (req, res) => {
     }
   })
 })
-
+router.get("/orders",(req,res)=>{
+  productHelper.getOrderProducts().then((orders)=>{
+    res.render("admin/view-orders",{orders})
+  })
+})
 
 module.exports = router;

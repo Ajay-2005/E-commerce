@@ -39,7 +39,7 @@ module.exports = {
 
       let response = {}
 
-      const user = await db.get().collection(collection.USER_COLLECTION).findOne({ Email: userData.Email })
+      const user = await db.get().collection(collection.USER_COLLECTION).findOne({ Email:{$eq:userData.Email }})
 
       console.log(user)
 
@@ -75,7 +75,7 @@ module.exports = {
     try {
       const userCollection = db.get().collection(collection.USER_COLLECTION);
       const result = await userCollection.findOneAndUpdate(
-        { Email: email },
+        { Email: { $eq: email } }, 
         { $set: { resetToken: token } },
         { returnOriginal: false }
       );
@@ -131,11 +131,8 @@ module.exports = {
     })
   },
   updatePassword: (userId, password) => {
-
     return new Promise(async (resolve, reject) => {
-      try {
-        console.log(password)
-        console.log(userId)
+      try {     
         const hashedPassword = await bcrypt.hash(password, 10);
         let userCollection = db.get().collection(collection.USER_COLLECTION)
         await userCollection.updateOne(
@@ -424,7 +421,7 @@ module.exports = {
       var options = {
         amount: total,
         currency: "INR",
-        receipt: "orderId" + orderId
+        receipt: "" + orderId
       };
       instances.orders.create(options, function (err, order) {
         if (err) {
@@ -439,24 +436,37 @@ module.exports = {
   },
   verifyPayment: (order) => {
     return new Promise((resolve, reject) => {
-      let hmac = crypto.createHmac('sha256', process.env.key_secret)
-      hmac.update(order['payment[razropay_orderId]'] + '|' + order['payment[razropay_payment_Id']);
-      hmac = hmac.digest('hex')
-      if (hmac == order['payment[razropay_signature']) {
-        resolve()
+      let hmac = crypto.createHmac('sha256', process.env.key_secret);
+      hmac.update(order['payment[razorpay_order_id]'] + '|' + order['payment[razorpay_payment_id]']);
+      hmac = hmac.digest('hex');
+      if (hmac === order['payment[razorpay_signature]']) {
+        resolve();
       } else {
-        reject()
+        reject(new Error('HMAC verification failed'));
       }
-    })
+    });
   },
+  
+  
   changePaymentStatus: (orderId) => {
     return new Promise((resolve, reject) => {
-      db.get().collection(collection.Order_collection).updateOne({ _id: new ObjectId(orderId) }), {
-        $set: {
-          status: "confirmed"
+      db.get().collection(collection.Order_collection).updateOne(
+        { _id: new ObjectId(orderId) },
+        {
+          $set: {
+            status: "confirmed"
+          }
+        },
+        (error) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
         }
-      }
-    })
+      );
+    });
   }
+  
 }
 

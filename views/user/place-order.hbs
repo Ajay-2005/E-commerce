@@ -128,6 +128,14 @@
             data: {
                 payment,
                 order
+            },
+            success:async (response)=>{
+                if (response.status){
+                    await swal("order Placed","","success")
+                }else{
+                    await swal("Payment failed","","warning")
+                }
+                
             }
         })
     }

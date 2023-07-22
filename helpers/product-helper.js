@@ -83,7 +83,7 @@ module.exports = {
 
       let response = {}
 
-      const admin = await db.get().collection(collection.Admin_Data).findOne({ email: Data.Email })
+      const admin = await db.get().collection(collection.Admin_Data).findOne({ email:{$eq:Data.Email }})
 
       console.log(admin)
 
@@ -112,7 +112,13 @@ module.exports = {
       }
     })
   },
+  getOrderProducts:()=>{
+    return new Promise ((resolve,reject)=>{
+      let orders=db.get().collection(collection.Order_collection).find().toArray();
+      resolve(orders)
 
+    })
+  }
   
 
   }
