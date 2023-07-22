@@ -11,7 +11,7 @@ const hbs = require('express-handlebars');
 var db=require('./config/mongo connection')
 var fileUpload=require('express-fileupload');
 const { log } = require('console');
-
+const ratelimit=require('express-rate-limit')
 var app = express();
 
 // view engine setup
@@ -36,10 +36,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
-app.use(session({secret:"key",cookie:{maxAge:600000}}))
+app.use(session({secret:process.env.Session_key,cookie:{maxAge:600000}}))
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
-
+const loginRateLimit = ratelimit({
+  windowMs: 60 * 1000, // Time window for rate-limiting in milliseconds (1 minute in this case)
+  max: 5, // Maximum number of requests per windowMs (5 in this case)
+  message: 'Too many login attempts, please try again later.',
+});
+const verifyPaymentRateLimit = ratelimit({
+  windowMs: 60 * 1000, // Time window for rate-limiting in milliseconds (1 minute in this case)
+  max: 5, // Maximum number of requests per windowMs (5 in this case)
+  message: 'Too many requests, please try again later.',
+});
+app.post('/verify-Payment', verifyPaymentRateLimit);
+app.post('/login', loginRateLimit);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
