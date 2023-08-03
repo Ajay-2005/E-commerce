@@ -11,7 +11,8 @@ const hbs = require('express-handlebars');
 var db=require('./config/mongo connection')
 var fileUpload=require('express-fileupload');
 const { log } = require('console');
-const ratelimit=require('express-rate-limit')
+const ratelimit=require('express-rate-limit');
+const csrf = require('lusca').csrf;
 var app = express();
 
 // view engine setup
@@ -29,7 +30,7 @@ db.connect((err)=>{
   if(err) console.log("error");
   else console.log("Database connected")
 })
-
+app.use(csrf());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -39,18 +40,13 @@ app.use(fileUpload())
 app.use(session({secret:process.env.Session_key,cookie:{maxAge:600000}}))
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
-const loginRateLimit = ratelimit({
+const RateLimit = ratelimit({
   windowMs: 60 * 1000, // Time window for rate-limiting in milliseconds (1 minute in this case)
   max: 5, // Maximum number of requests per windowMs (5 in this case)
-  message: 'Too many login attempts, please try again later.',
+  message: 'Too many  attempts, please try again later.',
 });
-const verifyPaymentRateLimit = ratelimit({
-  windowMs: 60 * 1000, // Time window for rate-limiting in milliseconds (1 minute in this case)
-  max: 5, // Maximum number of requests per windowMs (5 in this case)
-  message: 'Too many requests, please try again later.',
-});
-app.post('/verify-Payment', verifyPaymentRateLimit);
-app.post('/login', loginRateLimit);
+
+app.use(RateLimit)
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
