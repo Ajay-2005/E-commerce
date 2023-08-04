@@ -34,7 +34,7 @@ router.get('/login', (req, res) => {
   if (req.session.loggedIn) {
     res.redirect("/")
   }
-  res.render('user/login', { "loginErr": req.session.loginErr })
+  res.render('user/login', { "loginErr": req.session.loginErr , csrfToken: req.csrfToken() })
   req.session.loginErr = false
 })
 router.get('/signup', (req, res) => {
@@ -114,7 +114,7 @@ router.get("/add-to-cart/:id", verifyLogin, async (req, res) => {
 })
 
 router.get("/forgot-password", (req, res) => {
-  res.render("user/forgot-password")
+  res.render("user/forgot-password",{ csrfToken: req.csrfToken()})
 })
 router.post("/forgot-password", async (req, res) => {
   const email = req.body.email;
@@ -136,7 +136,7 @@ router.post("/forgot-password", async (req, res) => {
 router.get("/reset-password", async (req, res) => {
   const token = req.query.token
   console.log(token)
-  res.render("user/reset-password", { token })
+  res.render("user/reset-password", { token , csrfToken: req.csrfToken()})
 })
 router.post("/reset-password/:token", async (req, res) => {
   const token = req.params.token;  
@@ -185,7 +185,7 @@ router.post("/remove-cart",async (req,res)=>{
 })
 router.get("/place-order",verifyLogin,async (req,res)=>{
   let total=await userHelper.getTotalAmount(req.session.user._id)
-  res.render("user/place-order",{total,user:req.session.user})
+  res.render("user/place-order",{total,user:req.session.user,csrfToken: req.csrfToken()});
 })
 router.post("/place-order",async (req,res)=>{
 

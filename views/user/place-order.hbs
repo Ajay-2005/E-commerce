@@ -60,6 +60,7 @@
                             name="payment-method" required />
                         <label class="form-check-label" for="">Online payment</label>
                     </div>
+                    <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                     <input type="text" name="userId" value="{{user._id}}" hidden>
                     <input type="text" name="userName" value="{{user.name}}" hidden>
                     <div class="row p-1 pr-3">

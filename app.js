@@ -30,7 +30,7 @@ db.connect((err)=>{
   if(err) console.log("error");
   else console.log("Database connected")
 })
-app.use(csrf());
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -39,12 +39,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileUpload())
 app.use(
   session({
-    secret: process.env.Session_key || 'your-secret-key', // Replace 'your-secret-key' with your actual secret key
-    cookie: { maxAge: 600000, secure: true }, // secure: true will only send the cookie over HTTPS connections
+    secret: process.env.Session_key , 
+    cookie: { maxAge: 600000},
+    secure:true, // secure: true will only send the cookie over HTTPS connections
     resave: false,
     saveUninitialized: true,
   })
 );
+app.use(csrf());
 app.use('/', userRouter);
 app.use('/admin', adminRouter);
 const RateLimit = ratelimit({
