@@ -1,4 +1,4 @@
-#E commerce
+3#E commerce
 
 This project is a web application that offers a user-friendly e-commerce platform where customers can shop for products, create accounts, and manage their orders. The platform utilizes Express.js and MongoDB for a robust backend, while HBS, AJAX, and Bootstrap enhance the frontend experience.
 
