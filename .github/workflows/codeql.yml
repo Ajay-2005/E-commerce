@@ -66,3 +66,5 @@
   
      - name: Perform CodeQL Analysis 
        uses: github/codeql-action/analyze@v2
+     - with:
+         sarif_file: codeql-results.sarif
